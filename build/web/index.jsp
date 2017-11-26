@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <p>Request a secure User page <a href="secureUser/secretPage.html" >here!</a></p>
+        <p>Login <a href="secureUser/secretPage.html" >here!</a></p>
+        <p>Sign up for a new account <a href="signup.jsp" >here!</a></p>
     </body>
 </html>

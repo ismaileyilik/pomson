@@ -6,4 +6,11 @@
          connectionName="root" connectionPassword="wordpass"
               userTable="Users" userNameCol="Username" userCredCol="Password"
           userRoleTable="UserRoles" roleNameCol="Role" />
+      <Resource name="jdbc/PomodoroDatabase" auth="Container" 
+        driverClassName="com.mysql.jdbc.Driver" 
+        url="jdbc:mysql://localhost:3306/PomodoroDatabase?autoReconnect=true" 
+        username="root" password="wordpass" 
+        maxActive="100" maxIdle="30" maxWait="10000" 
+        logAbandoned="true" removeAbandoned="true" 
+        removeAbandonedTimeout="60" type="javax.sql.DataSource" />
 </Context>
