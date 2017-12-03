@@ -29,7 +29,7 @@ public class SignupServerlet extends HttpServlet {
         UsersBeanObj.setGivenUserName(username);
         UsersBeanObj.setGivenPassword(password);
         UsersBeanObj.createAccount();
-        System.out.println("ACCOUNT CREATED!!!! for @" + username + " " + password);
+        System.out.println("ACCOUNT CREATED for @" + username + " " + password);
         
         //Responding to the client
         PrintWriter writer = response.getWriter();
