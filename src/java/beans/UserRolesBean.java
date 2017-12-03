@@ -1,10 +1,9 @@
-package beans;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package beans;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -16,15 +15,15 @@ import java.sql.Statement;
  *
  * @author colton
  */
-public class UsersBean implements Serializable{
+public class UserRolesBean implements Serializable{
     private Connection connection = null;
     private ResultSet rs = null;
     private Statement st = null;
     private String connectionURL = "jdbc:mysql://localhost:3306/PomodoroDatabase";
     private String givenUsername;
-    private String givenPassword;
-    
-    public UsersBean(){
+    private String userRole;
+
+    public UserRolesBean(){
         super();
         try {
         // Load the database driver
@@ -36,9 +35,9 @@ public class UsersBean implements Serializable{
         }
     }
     
-    public void createAccount(){
+    public void updateUserRole(){
         try{
-            String sql = "INSERT INTO Users(Username,Password) VALUES('" + this.getGivenUsername() + "','" + this.getGivenPassword() + "')";
+            String sql = "INSERT INTO UserRoles(Username,Role) VALUES('" + this.getGivenUsername() + "','" + this.getUserRole() + "')";
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             System.out.println("The sql statement [" + sql + "] has been executed.");
@@ -46,24 +45,7 @@ public class UsersBean implements Serializable{
         }catch(Exception e){
             System.out.println("Exception is ;"+e);
         }
-    }            
-
-
-    public String getGivenUsername() {
-        return givenUsername;
-    }
-
-    public void setGivenUsername(String givenUsername) {
-        this.givenUsername = givenUsername;
-    }
-
-    public String getGivenPassword() {
-        return givenPassword;
-    }
-
-    public void setGivenPassword(String givenPassword) {
-        this.givenPassword = givenPassword;
-    }
+    }    
 
     public Connection getConnection() {
         return connection;
@@ -96,6 +78,21 @@ public class UsersBean implements Serializable{
     public void setConnectionURL(String connectionURL) {
         this.connectionURL = connectionURL;
     }
-    
+
+    public String getGivenUsername() {
+        return givenUsername;
+    }
+
+    public void setGivenUsername(String givenUsername) {
+        this.givenUsername = givenUsername;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
     
 }

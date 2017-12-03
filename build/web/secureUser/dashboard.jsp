@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : Nov 25, 2017, 9:38:06 PM
+    Document   : dashboard
+    Created on : Dec 3, 2017, 4:30:24 PM
     Author     : colton
 --%>
 
@@ -9,10 +9,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Pomodoro Homepage</title>
+        <title>User Dashboard</title>
     </head>
     <body>
-        <p>Login <a href="secureUser/dashboard.jsp" >here</a></p>
-        <p>Sign up for a new account <a href="signup.jsp" >here</a></p>
+        <p>View Goals<a href="viewGoals.jsp" > here</a></p>
+        <p>Start a Pomodoro<a href="pomodoroSession.html" > here</a></p>
     </body>
 </html>
+

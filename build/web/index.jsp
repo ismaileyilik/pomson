@@ -9,10 +9,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Pomodoro Homepage</title>
     </head>
     <body>
-        <p>Login <a href="secureUser/secretPage.html" >here!</a></p>
-        <p>Sign up for a new account <a href="signup.jsp" >here!</a></p>
+        <p>Login <a href="secureUser/dashboard.jsp" >here</a></p>
+        <p>Sign up for a new account <a href="signup.jsp" >here</a></p>
     </body>
 </html>

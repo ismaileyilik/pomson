@@ -5,6 +5,7 @@
  */
 package backend;
 
+import beans.UserRolesBean;
 import beans.UsersBean;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,14 +23,20 @@ import javax.servlet.http.HttpServletResponse;
 public class SignupServerlet extends HttpServlet {
  
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // code to process the form...
+        // code to process the form and create the user account and user roles entries in the appropriate tables
         String username = request.getParameter("Username");
         String password = request.getParameter("Password");
-        UsersBean UsersBeanObj = new UsersBean();
-        UsersBeanObj.setGivenUserName(username);
-        UsersBeanObj.setGivenPassword(password);
-        UsersBeanObj.createAccount();
-        System.out.println("ACCOUNT CREATED for @" + username + " " + password);
+        UsersBean usersBeanObj = new UsersBean();
+        usersBeanObj.setGivenUsername(username);
+        usersBeanObj.setGivenPassword(password);
+        usersBeanObj.createAccount();
+        System.out.println("ACCOUNT CREATED FOR: " + username);
+        
+        UserRolesBean userRolesBeanObj = new UserRolesBean();
+        userRolesBeanObj.setGivenUsername(username);
+        userRolesBeanObj.setUserRole("UserRole");
+        userRolesBeanObj.updateUserRole();
+        System.out.println("USER ROLE GENERATED FOR: " + username);
         
         //Responding to the client
         PrintWriter writer = response.getWriter();
