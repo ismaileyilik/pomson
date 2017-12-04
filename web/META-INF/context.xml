@@ -12,5 +12,5 @@
         username="root" password="wordpass" 
         maxActive="100" maxIdle="30" maxWait="10000" 
         logAbandoned="true" removeAbandoned="true" 
-        removeAbandonedTimeout="60" type="javax.sql.DataSource" />
+        removeAbandonedTimeout="6000" type="javax.sql.DataSource" />
 </Context>

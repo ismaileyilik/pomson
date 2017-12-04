@@ -12,8 +12,15 @@
         <title>User Dashboard</title>
     </head>
     <body>
-        <p>View Goals <a href="viewGoals.jsp" >here</a></p>
         <p>Start a Pomodoro <a href="pomodoroSession.html" >here</a></p>
+        <p>View Goals <a href="viewGoals.jsp" >here</a></p>
+        <p>Edit Goals <a href="updateGoals.jsp" >here</a></p>
+        <p>Create a Group <a href="createGroup.jsp" >here</a></p>
+        <p>Find Groups <a href="findGroups.jsp" >here</a></p>
+        <p>View Groups <a href="viewGroups.jsp" >here</a></p>
+        <p>Add Friends <a href="findFriends.jsp" >here</a></p>
+        <p>View Friends <a href="viewFriends.jsp" >here</a></p>
+
     </body>
 </html>
 

@@ -12,12 +12,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sign Up</title>
+        <link rel='stylesheet' type='text/css' href='/inputFormStyleSheet.css'/>
     </head>
     <body>
-        <form name="signupForm" method="POST" action="signupServerlet">
-          Username: <input type="text" name ="Username"> <br>
-          Password: <input type="password" name ="Password"> <br>
-           <input type = "submit" value="Submit">
-        </form>
+        <div class = "centeredText"> <h1> Create a New Account </h1> </div>
+        <div class = "centeredText">
+            <form name="signupForm" method="POST" action="signupServerlet">
+              <input type="text" name ="Username" class = "mediumFont" placeholder="Enter your desired username..."> <br>
+              <input type="password" name ="Password" class = "mediumFont" placeholder="Enter your desired password..."> <br>
+               <input type="submit" value="Submit">
+            </form>
+        </div>
     </body>
 </html>

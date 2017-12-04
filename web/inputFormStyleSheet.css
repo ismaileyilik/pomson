@@ -1,0 +1,56 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Dec 4, 2017, 4:05:36 PM
+    Author     : colton
+*/
+.mediumFont {
+    font-size:16px;
+    font-family:tahoma arial;
+}
+
+.centeredText {
+    text-align:center;
+}
+
+textarea {
+    width: 40%;
+    resize: none; /* user can't resize */
+    overflow-y: scroll;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+
+input[type=text]{
+    width: 40%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=password]{
+    width: 40%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+input[type=submit]{
+    width: 15%;
+    padding: 12px;
+    margin: 8px 0;
+}
+
+input[type=text]:focus {
+    border: 2px solid #555;
+}
+input[type=password]:focus {
+    border: 2px solid #555;
+}
+textArea:focus {
+    border: 2px solid #555;
+}
+

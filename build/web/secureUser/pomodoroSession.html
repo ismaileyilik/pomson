@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Start a Pomodoro!</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
@@ -17,6 +17,12 @@ and open the template in the editor.
         <button class="start">Start</button>
         <button class="pause">Pause</button>
         <button class="reset">Reset</button>
+        <button onclick="goBack()">Cancel</button>
+        <script>
+        function goBack() {
+            window.history.back();
+        }
+        </script> 
 
         <script>
         var isPaused = true;
