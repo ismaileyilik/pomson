@@ -4,7 +4,7 @@
              driverName="com.mysql.jdbc.Driver"
           connectionURL="jdbc:mysql://localhost:3306/PomodoroDatabase"
          connectionName="root" connectionPassword="wordpass"
-              userTable="Users" userNameCol="Username" userCredCol="Password"
+              userTable="Users" userNameCol="Username" userCredCol="LoginPassword"
           userRoleTable="UserRoles" roleNameCol="Role" />
       <Resource name="jdbc/PomodoroDatabase" auth="Container" 
         driverClassName="com.mysql.jdbc.Driver" 

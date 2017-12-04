@@ -12,8 +12,8 @@
         <title>User Dashboard</title>
     </head>
     <body>
-        <p>View Goals<a href="viewGoals.jsp" > here</a></p>
-        <p>Start a Pomodoro<a href="pomodoroSession.html" > here</a></p>
+        <p>View Goals <a href="viewGoals.jsp" >here</a></p>
+        <p>Start a Pomodoro <a href="pomodoroSession.html" >here</a></p>
     </body>
 </html>
 

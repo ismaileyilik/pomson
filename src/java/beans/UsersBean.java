@@ -38,7 +38,8 @@ public class UsersBean implements Serializable{
     
     public void createAccount(){
         try{
-            String sql = "INSERT INTO Users(Username,Password) VALUES('" + this.getGivenUsername() + "','" + this.getGivenPassword() + "')";
+            String sql = "INSERT INTO Users(Username,LoginPassword, PomodoroLengthPreferenceMins, PomodoroShortBreakPreferenceMins, PomodoroLongBreakPreferenceMins) VALUES('" 
+                    + this.getGivenUsername() + "','" + this.getGivenPassword() + "', 25, 5, 10 " + ")";
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             System.out.println("The sql statement [" + sql + "] has been executed.");
