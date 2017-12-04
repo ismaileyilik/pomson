@@ -10,8 +10,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>View Goals</title>
+        <jsp:include page="/viewGoalsServerlet"/>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        Goals for <%= request.getRemoteUser() %> will be listed here
     </body>
 </html>
