@@ -15,7 +15,8 @@
     <body>
         <h1> <div class = "centeredText"> Add a Friend </div> </h1>
         <div class = "centeredText"> 
-            <form name="addFriendForm" method="POST" action="addFriendsServerlet">
+            <form name="addFriendForm" method="POST" action="../controllerServerlet">
+            <input type="hidden"  name="action" value="addFriendForm">   
             <input type ="text" class = "mediumFont" name="friendsUsername" placeholder="Search for a username...">
             <button type="submit" value="Submit">Send Friend Request</button>
             <button type ="button" onclick="goBack()">Cancel</button>

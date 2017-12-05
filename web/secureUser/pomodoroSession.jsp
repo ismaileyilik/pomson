@@ -18,7 +18,8 @@
         <h1> <div class = "centeredText"><p id="timer"></p></div> </h1>
         <br>
         <div class = "centeredText"> 
-        <form name="savePomodoroForm" method="POST" action="../savePomodoroServerlet">
+        <form name="savePomodoroForm" method="POST" action="../controllerServerlet">
+        <input type="hidden" name="action" value="savePomodoroForm">
             Task: <br>
             <input type ="text" class = "mediumFont" name="task"> <br>
             Comments: <br>

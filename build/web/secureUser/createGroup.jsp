@@ -14,7 +14,8 @@
     </head>
     <body>
         <h1> <div class = "centeredText"> Create a new group </div> </h1>
-        <div class = "centeredText"> <form name="createGroupForm" method="POST" action="../createGroupServerlet">
+        <div class = "centeredText"> <form name="createGroupForm" method="POST" action="../controllerServerlet">
+            <input type="hidden" name="action" value="createGroupForm">
             Group Name: <br>
             <input type ="text" class = "mediumFont" name="groupName"> <br>
             Description: <br>

@@ -15,7 +15,8 @@
     <body>
         <h1> <div class = "centeredText"> Search for a Group </div> </h1>
         <div class = "centeredText"> 
-            <form name="findGroupsForm" method="POST" action="findGroupsServerlet">
+            <form name="findGroupsForm" method="POST" action="../controllerServerlet">
+            <input type="hidden"  name="action" value="findGroupsForm">
             <input type ="text" class = "mediumFont" name="groupName" placeholder="Search for a group...">
             <button type="submit" value="Submit">Request to Join</button>
             <button type ="button" onclick="goBack()">Cancel</button>
