@@ -33,8 +33,10 @@ public class DatabaseDriver {
             Class.forName("com.mysql.jdbc.Driver");
         // Get a Connection to the database
             connection = DriverManager.getConnection(connectionURL, "root", "wordpass");
-        }catch(Exception e){
-            System.out.println("Exception is ;"+e);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -56,13 +58,15 @@ public class DatabaseDriver {
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             s.close ();
-        }catch(Exception e){
-            System.out.println("Exception is ;"+e);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         closeConnection();
     }
     
+    
+    //input needs to be sanitized, the 's in the text for the group name can cause the sql to be messed up. use prepared statement
     public void insertGroupsBeanObj(GroupsBean groupsBeanObj){
         openConnection();
         
@@ -73,13 +77,13 @@ public class DatabaseDriver {
             }else if(groupsBeanObj.getVerifyBeforeJoining() == false){
                 booleanAsInt = 0;
             }
-            String sql = "INSERT INTO Groups(GroupID, GroupName, Description, VerificationBeforeJoinBoolean) VALUES("
-                    + groupsBeanObj.getGroupID() + ", '" + groupsBeanObj.getGroupName() + "', '" + groupsBeanObj.getDescription() + "', " + booleanAsInt + ")";
+            String sql = "INSERT INTO Groups(GroupID, GroupName, Description, VerificationBeforeJoinBoolean) VALUES(NULL, '" 
+                    + groupsBeanObj.getGroupName() + "', '" + groupsBeanObj.getDescription() + "', " + booleanAsInt + ")";
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             s.close ();
-        }catch(Exception e){
-            System.out.println("Exception is ;"+e);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         closeConnection();
@@ -93,8 +97,8 @@ public class DatabaseDriver {
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             s.close ();
-        }catch(Exception e){
-            System.out.println("Exception is ;"+e);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         closeConnection();
@@ -110,8 +114,8 @@ public class DatabaseDriver {
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             s.close ();
-        }catch(Exception e){
-            System.out.println("Exception is ;"+e);
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         closeConnection();

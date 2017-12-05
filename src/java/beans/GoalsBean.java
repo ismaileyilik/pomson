@@ -6,7 +6,7 @@
 package beans;
 
 import java.io.Serializable;
-import java.sql.Time;
+import java.sql.Timestamp;
 
 /**
  *
@@ -18,8 +18,8 @@ public class GoalsBean implements Serializable{
     private String username;
     private String goalName;
     private String goalDescription;
-    private Time startTime;
-    private Time endTime;
+    private Timestamp startTime;
+    private Timestamp endTime;
 
     public GoalsBean(){
         super();
@@ -65,19 +65,19 @@ public class GoalsBean implements Serializable{
         this.goalDescription = goalDescription;
     }
 
-    public Time getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
     }
   

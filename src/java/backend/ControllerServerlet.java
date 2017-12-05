@@ -10,8 +10,7 @@ import beans.GroupsBean;
 import beans.UserRoleBean;
 import beans.UsersBean;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -93,9 +92,9 @@ public class ControllerServerlet extends HttpServlet {
         String goalDescription = request.getParameter("goalDescription");
         int groupIDToApplyTo = Integer.parseInt(request.getParameter("groupIDToApplyTo"));
         Date today = new java.util.Date();
-        Time startTime;
-        Time endTime; 
-        startTime = new Time(today.getTime());
+        Timestamp startTime;
+        startTime = new Timestamp(System.currentTimeMillis());
+        Timestamp endTime; 
         GoalsBean goalsBeanObj = new GoalsBean();
         goalsBeanObj.setGroupID(groupIDToApplyTo);
         goalsBeanObj.setUsername(Username);
@@ -135,7 +134,6 @@ public class ControllerServerlet extends HttpServlet {
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         // code to process the form and create the user account and user roles entries in the appropriate tables
-        int groupID = 1;
         String Username = request.getRemoteUser();
         String groupName = request.getParameter("groupName");
         String description = request.getParameter("groupDescription");
@@ -150,7 +148,6 @@ public class ControllerServerlet extends HttpServlet {
         }
         
         GroupsBean groupsBeanObj = new GroupsBean();
-        groupsBeanObj.setGroupID(groupID);
         groupsBeanObj.setGroupName(groupName);
         groupsBeanObj.setDescription(description);
         groupsBeanObj.setVerifyBeforeJoining(verifyBeforeJoining);
