@@ -16,21 +16,18 @@ import java.sql.Time;
  *
  * @author colton
  */
-public class GoalsBean implements Serializable{
+public class GroupsBean implements Serializable{
     private Connection connection = null;
     private ResultSet rs = null;
     private Statement st = null;
     private String connectionURL = "jdbc:mysql://localhost:3306/PomodoroDatabase";
     
-    private int goalID;
     private int groupID;
-    private String username;
-    private String goalName;
-    private String goalDescription;
-    private Time startTime;
-    private Time endTime;
+    private String groupName;
+    private String description;
+    private Boolean verifyBeforeJoining;
 
-    public GoalsBean(){
+    public GroupsBean(){
         super();
         try {
         // Load the database driver
@@ -42,12 +39,11 @@ public class GoalsBean implements Serializable{
         }
     }
     
-    public void saveGoal(){
+    public void createGroup(){
         try{
-            this.setGoalID(1);
-            String sql = "INSERT INTO Goals(GoalID, GroupID, Username, GoalName, Description, StartTime, EndTime) VALUES("
-                    + this.getGoalID() + ", " + this.getGroupID() + ", '" + this.getUsername() + "', '" + this.getGoalName() +
-                    "', '" + this.getGoalDescription() + "', '" + this.getStartTime() + "', '" + this.getStartTime() + "')";
+            this.setGroupID(1);
+            String sql = "INSERT INTO Groups(GroupID, GroupName, Description, VerificationBeforeJoinBoolean) VALUES("
+                    + this.getGroupID() + ", '" + this.getGroupName() + "', '" + this.getDescription() + "', " + this.getVerifyBeforeJoining() + ")";
             Statement s = connection.createStatement();
             s.executeUpdate (sql);
             System.out.println("The sql statement [" + sql + "] has been executed.");
@@ -56,9 +52,7 @@ public class GoalsBean implements Serializable{
             System.out.println("Exception is ;"+e);
         }
     }
-    
-    
-    
+
     public Connection getConnection() {
         return connection;
     }
@@ -91,14 +85,6 @@ public class GoalsBean implements Serializable{
         this.connectionURL = connectionURL;
     }
 
-    public int getGoalID() {
-        return goalID;
-    }
-
-    public void setGoalID(int goalID) {
-        this.goalID = goalID;
-    }
-
     public int getGroupID() {
         return groupID;
     }
@@ -107,46 +93,29 @@ public class GoalsBean implements Serializable{
         this.groupID = groupID;
     }
 
-    public String getUsername() {
-        return username;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
-    public String getGoalName() {
-        return goalName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setGoalName(String goalName) {
-        this.goalName = goalName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getGoalDescription() {
-        return goalDescription;
+    public Boolean getVerifyBeforeJoining() {
+        return verifyBeforeJoining;
     }
 
-    public void setGoalDescription(String goalDescription) {
-        this.goalDescription = goalDescription;
+    public void setVerifyBeforeJoining(Boolean verifyBeforeJoining) {
+        this.verifyBeforeJoining = verifyBeforeJoining;
     }
-
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    public Time getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-  
     
     
 }

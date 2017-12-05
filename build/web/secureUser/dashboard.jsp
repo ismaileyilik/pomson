@@ -12,7 +12,7 @@
         <title>User Dashboard</title>
     </head>
     <body>
-        <p>Start a Pomodoro <a href="pomodoroSession.html" >here</a></p>
+        <p>Start a Pomodoro <a href="pomodoroSession.jsp" >here</a></p>
         <p>View Goals <a href="viewGoals.jsp" >here</a></p>
         <p>Edit Goals <a href="updateGoals.jsp" >here</a></p>
         <p>Create a Group <a href="createGroup.jsp" >here</a></p>

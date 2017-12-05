@@ -14,13 +14,13 @@
     </head>
     <body>
         <h1> <div class = "centeredText"> Create a new group </div> </h1>
-        <div class = "centeredText"> <form name="createGroupForm" method="POST" action="createGroupServerlet">
+        <div class = "centeredText"> <form name="createGroupForm" method="POST" action="../createGroupServerlet">
             Group Name: <br>
             <input type ="text" class = "mediumFont" name="groupName"> <br>
             Description: <br>
             <textarea class = "mediumFont" rows="4" name="groupDescription"> </textarea> <br>
             Verify users as members of the group before allowing them to join?: 
-            <input id="verifyUsersCheckBox" type="checkbox"> <br><br>
+            <input name="verifyUsersCheckBox" type="checkbox"> <br><br>
             <button type="submit" value="Submit">Create Group</button>
             <button type="reset" value="Reset">Reset Forms</button>
             

@@ -1,33 +1,45 @@
+<%-- 
+    Document   : pomodoroSession
+    Created on : Dec 4, 2017, 7:27:12 PM
+    Author     : colton
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
-        <title>Start a Pomodoro!</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <link rel='stylesheet' type='text/css' href='../inputFormStyleSheet.css'/>
+        <title>Start a Pomodoro!</title>
     </head>
     <body>
-        <!-- Display the timer in an element -->
-        <p id="timer"></p>
-        <button class="start">Start</button>
-        <button class="pause">Pause</button>
-        <button class="reset">Reset</button>
-        <button onclick="goBack()">Cancel</button>
-        <script>
-        function goBack() {
-            window.history.back();
-        }
-        </script> 
+<!-- Display the timer in an element -->
+        <h1> <div class = "centeredText"><p id="timer"></p></div> </h1>
+        <br>
+        <div class = "centeredText"> 
+        <form name="savePomodoroForm" method="POST" action="../savePomodoroServerlet">
+            Task: <br>
+            <input type ="text" class = "mediumFont" name="task"> <br>
+            Comments: <br>
+            <textarea class = "mediumFont" rows="4" cols="60" name="comments"> </textarea> <br>
+            Apply Task to Goal:
+            <select name = "goalIDToApplyTo">
+                <option value="Goal 1">Goal 1</option>
+                <option value="Goal 2">Goal 2</option>
+            </select> <br> <br>
+            <button class="start">Start</button>
+            <button class="pause">Pause</button>
+            <button class="reset">Reset</button>
+            <button type="button" onclick="goBack()">Cancel</button>
+            <button type="submit" class ="saveButton" value="Submit">Save Pomodoro</button>
+        </form>
+        </div>
 
         <script>
         var isPaused = true;
         var defaultPomodoroLength = calcMinutesInSeconds(25);
-        var totalSecondsLeft = defaultPomodoroLength;
+        var totalSecondsLeft = 5;
         var minutesLeft = Math.floor(totalSecondsLeft/60);
         var secondsLeft = totalSecondsLeft % 60;
         // Update the count down every 1 second
@@ -38,6 +50,7 @@ and open the template in the editor.
         //Use jquery for the buttons actions
         $(document).ready(function(){
             $(".pause").hide();
+            $(".saveButton").hide();
         });
 
         $('.pause').on('click', function(e) {
@@ -63,7 +76,12 @@ and open the template in the editor.
             document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
             $(".start").show();
             $(".pause").hide();
+            $(".saveButton").hide();
         });
+        
+        function goBack() {
+            window.history.back();
+        }
 
         function calcMinutesInSeconds(minutesDesired){
             var secondsNeeded = 60 * minutesDesired;
@@ -72,16 +90,16 @@ and open the template in the editor.
 
         //Function to handle updating the timer
         function updateTimer(){
-            if(!isPaused){
+            if(!isPaused && totalSecondsLeft > 0){
                 totalSecondsLeft -= 1;
                 minutesLeft = Math.floor(totalSecondsLeft/60);
                 secondsLeft = totalSecondsLeft % 60;
                 // Display the result in the element with id="demo"
                 document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
                 // If the count down is finished, write some text
-                if (secondsLeft < 0) {
+                if (secondsLeft <= 0) {
+                  $(".saveButton").show();
                   clearInterval(x);
-                  document.getElementById("timer").innerHTML = "EXPIRED";
                 }
             }
         }
