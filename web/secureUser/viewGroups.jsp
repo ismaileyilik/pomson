@@ -17,9 +17,10 @@
         <h1> Groups that <%= request.getRemoteUser() %> is a member of </h1>
         <table>
             <tr>
-                <th style="margin-right:5px;">Group Name</th>
-                <th style="margin-right:5px;">Description</th>
-                <th style="margin-right:5px;">Verify before Joining</th>
+                <th style="margin-right:10px;">Group Name</th>
+                <th style="margin-right:10px;">Description</th>
+                <th style="margin-right:10px;">Verify before Joining</th>
+                <th style="margin-right:10px;">Actions</th>
             </tr>
 
             <c:forEach var="group" items="${groupList}">

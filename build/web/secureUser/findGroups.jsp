@@ -28,12 +28,14 @@
             </script> 
             </form> 
         </div>
+        
         <h1> Found Groups </h1> <br> <br>
         <table>
             <tr>
-                <th style="margin-right:5px;">Group Name</th>
-                <th style="margin-right:5px;">Description</th>
-                <th style="margin-right:5px;">Verify before Joining</th>
+                <th style="margin-right:10px;">Group Name</th>
+                <th style="margin-right:10px;">Description</th>
+                <th style="margin-right:10px;">Verification To Join</th>
+                <th style="margin-right:10px;">Actions</th>
             </tr>
 
             <c:forEach var="group" items="${groupList}">

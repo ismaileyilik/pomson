@@ -5,6 +5,7 @@
  */
 package backend;
 
+import beans.FriendsBean;
 import beans.GoalsBean;
 import beans.GroupMembersBean;
 import beans.GroupsBean;
@@ -53,6 +54,7 @@ public class DatabaseDriver {
     
     public void insertGoalsBeanObj(GoalsBean goalsBeanObj){
         openConnection();
+        
         PreparedStatement ps = null;
         String sql = "INSERT INTO Goals(GroupID, Username, GoalName, Description) VALUES(?,?,?,?)";
         
@@ -75,6 +77,7 @@ public class DatabaseDriver {
     //input needs to be sanitized, the 's in the text for the group name can cause the sql to be messed up. use prepared statement
     public void insertGroupsBeanObj(GroupsBean groupsBeanObj){
         openConnection();
+        
         PreparedStatement ps = null;
         String sql = "INSERT INTO Groups(GroupName, Description, VerificationBeforeJoinBoolean) VALUES(?,?,?)" ;
         
@@ -100,12 +103,13 @@ public class DatabaseDriver {
     
     public void insertUserRoleBeanObj(UserRoleBean userRoleBeanObj){
         openConnection();
+        
         PreparedStatement ps = null;
         String sql = "INSERT INTO UserRoles(Username,Role) VALUES(?,?)";
         
         try{
             ps = connection.prepareStatement(sql);
-            ps.setString(1, userRoleBeanObj.getGivenUsername());
+            ps.setString(1, userRoleBeanObj.getUsername());
             ps.setString(2, userRoleBeanObj.getUserRole());
             ps.executeUpdate();
             ps.close();
@@ -118,14 +122,15 @@ public class DatabaseDriver {
     
     public void insertUsersBeanObj(UsersBean usersBeanObj){
         openConnection();
+        
         PreparedStatement ps = null;
         
         String sql = "INSERT INTO Users(Username,LoginPassword, PomodoroLengthPreferenceMins, "
                     + "PomodoroShortBreakPreferenceMins, PomodoroLongBreakPreferenceMins) VALUES(?,?,?,?,?)";
         try{
             ps = connection.prepareStatement(sql);
-            ps.setString(1, usersBeanObj.getGivenUsername());
-            ps.setString(2,usersBeanObj.getGivenPassword());
+            ps.setString(1, usersBeanObj.getUsername());
+            ps.setString(2,usersBeanObj.getPassword());
             ps.setInt(3,usersBeanObj.getPomodoroLengthPreferenceMins());
             ps.setInt(4,usersBeanObj.getPomodoroShortBreakPreferenceMins());
             ps.setInt(5,usersBeanObj.getPomodoroLongBreakPreferenceMins());
@@ -140,6 +145,7 @@ public class DatabaseDriver {
     
     public ArrayList<GroupsBean> searchForGroups(String groupName){
         openConnection();
+        
         PreparedStatement ps = null;
         ResultSet rs  = null;
         String sql = "SELECT * FROM Groups WHERE GroupName LIKE ?";
@@ -165,12 +171,11 @@ public class DatabaseDriver {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        
-        
         closeConnection();  
         return returnList;
     }
-    public ArrayList<GroupsBean> getMembershipOf(String userName){
+    
+    public ArrayList<GroupsBean> getMembershipOf(String username){
         openConnection();
         PreparedStatement ps = null;
         ResultSet rs  = null;
@@ -178,7 +183,7 @@ public class DatabaseDriver {
         ArrayList<GroupsBean> returnList = new ArrayList<>();
         try{
             ps = connection.prepareStatement(sql);
-            ps.setString(1, userName);
+            ps.setString(1, username);
             rs = ps.executeQuery();
             while(rs.next()){
                 String name = rs.getString("GroupName");
@@ -218,6 +223,67 @@ public class DatabaseDriver {
         }
         
         closeConnection();
+    }
+    
+    public ArrayList<FriendsBean> getFriendsOf(String username){
+        openConnection();
+        PreparedStatement ps = null;
+        ResultSet rs  = null;
+        String sql = "SELECT * FROM Friends WHERE FirstFriend = ? OR SecondFriend = ?";
+        ArrayList<FriendsBean> returnList = new ArrayList<>();
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, username);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String firstUser = rs.getString("FirstFriend");
+                String secondUser = rs.getString("SecondFriend");
+                FriendsBean friendsBeanObj = new FriendsBean();
+                //Ensuring that the first user is always stored as the logged in user
+                if(firstUser.equals(username)){
+                    friendsBeanObj.setFirstFriend(firstUser);
+                    friendsBeanObj.setSecondFriend(secondUser);
+                }else{
+                    friendsBeanObj.setFirstFriend(secondUser);
+                    friendsBeanObj.setSecondFriend(firstUser);
+                }
+
+                returnList.add(friendsBeanObj);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        closeConnection();  
+        return returnList;
+    }
+    
+    public ArrayList<UsersBean> searchForUsers(String enteredUsername){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ResultSet rs  = null;
+        String sql = "SELECT * FROM Users WHERE Username LIKE ?";
+        ArrayList<UsersBean> returnList = new ArrayList<>();
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, "%"+enteredUsername+"%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String username = rs.getString("Username");
+                UsersBean usersBeanObj = new UsersBean();
+                usersBeanObj.setUsername(username);
+                returnList.add(usersBeanObj);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();  
+        return returnList;
     }
     
 }

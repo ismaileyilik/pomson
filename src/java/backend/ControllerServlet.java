@@ -5,6 +5,7 @@
  */
 package backend;
 
+import beans.FriendsBean;
 import beans.GoalsBean;
 import beans.GroupMembersBean;
 import beans.GroupsBean;
@@ -26,11 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/controllerServlet")
 public class ControllerServlet extends HttpServlet {
     
- 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        String modifiedUrl = "/index.jsp";
+        String modifiedUrl = "/secureUser/dashboard.jsp";
         
         if( action.equals("viewGoals")){
             modifiedUrl = "/secureUser/viewGoals.jsp";
@@ -50,7 +50,7 @@ public class ControllerServlet extends HttpServlet {
         }
         else if( action.equals("findGroups")){
             modifiedUrl = "/secureUser/findGroups.jsp";
-            //TODO get infro from DB and pass it with request obj
+            //TODO get pending friend request info from DB and pass it with request obj
         }
         else if( action.equals("viewGroups")){
             modifiedUrl = "/secureUser/viewGroups.jsp";
@@ -58,7 +58,6 @@ public class ControllerServlet extends HttpServlet {
             String username = request.getRemoteUser();
             ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
             request.setAttribute("groupList", groups);
-            //TODO get infro from DB and pass it with request obj
         }
         else if( action.equals("findFriends")){
             modifiedUrl = "/secureUser/findFriends.jsp";
@@ -66,12 +65,23 @@ public class ControllerServlet extends HttpServlet {
         }
         else if( action.equals("viewFriends")){
             modifiedUrl = "/secureUser/viewFriends.jsp";
-            //TODO get infro from DB and pass it with request obj
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+            ArrayList<FriendsBean> friendsList = databaseDriverObj.getFriendsOf(username);
+            request.setAttribute("friendsList", friendsList);
         }
-         else if(action.equals("joinGroup")){
+        else if(action.equals("joinGroup")){
             modifiedUrl = this.executeJoinGroup(request,response);
         }
-        
+        else if(action.equals("viewProfile")){
+            modifiedUrl = this.executeViewProfile(request,response);
+        }
+        else if(action.equals("removeFriend")){
+            modifiedUrl = this.executeRemoveFriend(request,response);
+        }        
+        else if(action.equals("addFriend")){
+            modifiedUrl = this.executeAddFriend(request,response);
+        }
         
         getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response); 
     }
@@ -88,8 +98,8 @@ public class ControllerServlet extends HttpServlet {
         else if(formAction.equals("createGroupForm")){
             modifiedUrl = this.executeCreateGroupForm(request, response);
         }
-        else if(formAction.equals("addFriendForm")){
-            modifiedUrl = this.executeAddFriendForm(request, response);
+        else if(formAction.equals("findUserForm")){
+            modifiedUrl = this.executeFindUserForm(request, response);
         }        
         else if(formAction.equals("findGroupsForm")){
             modifiedUrl = this.executeFindGroupsForm(request, response);
@@ -101,7 +111,6 @@ public class ControllerServlet extends HttpServlet {
             modifiedUrl = this.executeUpdateGoalForm(request, response);
         }
        
-        
         getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response);
     }
     
@@ -113,15 +122,15 @@ public class ControllerServlet extends HttpServlet {
         String username = request.getParameter("Username");
         String password = request.getParameter("Password");
         UsersBean usersBeanObj = new UsersBean();
-        usersBeanObj.setGivenUsername(username);
-        usersBeanObj.setGivenPassword(password);
+        usersBeanObj.setUsername(username);
+        usersBeanObj.setPassword(password);
         usersBeanObj.setPomodoroLengthPreferenceMins(25);
         usersBeanObj.setPomodoroShortBreakPreferenceMins(5);
         usersBeanObj.setPomodoroLongBreakPreferenceMins(10);
         databaseDriverObj.insertUsersBeanObj(usersBeanObj);
         
         UserRoleBean userRolesBeanObj = new UserRoleBean();
-        userRolesBeanObj.setGivenUsername(username);
+        userRolesBeanObj.setUsername(username);
         userRolesBeanObj.setUserRole("UserRole");
         databaseDriverObj.insertUserRoleBeanObj(userRolesBeanObj);
         
@@ -159,21 +168,27 @@ public class ControllerServlet extends HttpServlet {
         String task = request.getParameter("task");
         String comments = request.getParameter("comments");
         String goalIDToApplyTo = request.getParameter("goalIDToApplyTo");
-        
-        
+       
         return urlToRedirectTo;
     }
 
     private String executeFindGroupsForm(HttpServletRequest request, HttpServletResponse response){
         String urlToRedirectTo = "/secureUser/findGroups.jsp";
+        
         String groupName = request.getParameter("groupName");
         ArrayList<GroupsBean> foundGroupsList = new DatabaseDriver().searchForGroups(groupName);
         request.setAttribute("groupList", foundGroupsList);
+        
         return urlToRedirectTo;
     }
 
-    private String executeAddFriendForm(HttpServletRequest request, HttpServletResponse response){
-        String urlToRedirectTo = "/secureUser/dashboard.jsp";
+    private String executeFindUserForm(HttpServletRequest request, HttpServletResponse response){
+        String urlToRedirectTo = "/secureUser/findFriends.jsp";
+        
+        String queriedUsername = request.getParameter("queriedUsername");
+        ArrayList<UsersBean> usersList = new DatabaseDriver().searchForUsers(queriedUsername);
+        request.setAttribute("usersList", usersList);
+        
         return urlToRedirectTo;
     }
 
@@ -200,6 +215,7 @@ public class ControllerServlet extends HttpServlet {
         groupsBeanObj.setDescription(description);
         groupsBeanObj.setVerifyBeforeJoining(verifyBeforeJoining);
         databaseDriverObj.insertGroupsBeanObj(groupsBeanObj);
+        
         return urlToRedirectTo;
     }
 
@@ -219,10 +235,25 @@ public class ControllerServlet extends HttpServlet {
         //TODO call DB and get list of groups that this user is in so we can pass it onto the viewGroups.jsp
         ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
         request.setAttribute("groupList", groups);
-        
-  
+       
         return urlToRedirectTo;
     }
     
+    private String executeViewProfile(HttpServletRequest request, HttpServletResponse response) {
+        String urlToRedirectTo = "/secureUser/viewGroups.jsp";
+        return urlToRedirectTo;
+    }
+    
+    private String executeRemoveFriend(HttpServletRequest request, HttpServletResponse response) {
+        String urlToRedirectTo = "/secureUser/viewGroups.jsp";
+        return urlToRedirectTo;
+    }
+    
+    private String executeAddFriend(HttpServletRequest request, HttpServletResponse response) {
+        String urlToRedirectTo = "/secureUser/viewGroups.jsp";
+        
+        
+        return urlToRedirectTo;
+    }
 
 }

@@ -12,19 +12,19 @@ import java.io.Serializable;
  * @author colton
  */
 public class UserRoleBean implements Serializable{
-    private String givenUsername;
+    private String username;
     private String userRole;
 
     public UserRoleBean(){
         super();
     }   
 
-    public String getGivenUsername() {
-        return givenUsername;
+    public String getUsername() {
+        return username;
     }
 
-    public void setGivenUsername(String givenUsername) {
-        this.givenUsername = givenUsername;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getUserRole() {
