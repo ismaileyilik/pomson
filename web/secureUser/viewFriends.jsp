@@ -21,12 +21,12 @@
                 <th style="margin-right:10px;">Actions</th>
             </tr>
 
-            <c:forEach var="friend" items="${friendsList}">
+            <c:forEach var="friendship" items="${friendsList}">
                 <tr>
-                    <td>${friendsList.secondFriend}</td>
-                    <td>${friendsList.friendsSinceDate}</td>
-                    <td><a href="<c:url value='/controllerServlet?action=viewProfile&username=${friendsList.secondFriend}'/>">View Profile</a></td>
-                    <td><a href="<c:url value='/controllerServlet?action=removeFriend&username=${friendsList.secondFriend}'/>">Remove Friend</a></td>
+                    <td>${friendship.secondFriend}</td>
+                    <td>${friendship.friendsSinceDate}</td>
+                    <td><a href="<c:url value='/controllerServlet?action=viewProfile&username=${friendship.secondFriend}'/>">View Profile</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=removeFriend&username=${friendship.secondFriend}'/>">Remove Friend</a></td>
                 </tr>
             </c:forEach>
         </table>

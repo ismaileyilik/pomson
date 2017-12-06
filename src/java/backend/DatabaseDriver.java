@@ -5,6 +5,7 @@
  */
 package backend;
 
+import beans.FriendRequestsBean;
 import beans.FriendsBean;
 import beans.GoalsBean;
 import beans.GroupMembersBean;
@@ -236,7 +237,9 @@ public class DatabaseDriver {
             while(rs.next()){
                 String firstUser = rs.getString("FirstFriend");
                 String secondUser = rs.getString("SecondFriend");
+                Timestamp friendsSinceDate = rs.getTimestamp("FriendsSinceDate");
                 FriendsBean friendsBeanObj = new FriendsBean();
+                friendsBeanObj.setFriendsSinceDate(friendsSinceDate);
                 //Ensuring that the first user is always stored as the logged in user
                 if(firstUser.equals(username)){
                     friendsBeanObj.setFirstFriend(firstUser);
@@ -331,6 +334,27 @@ public class DatabaseDriver {
             ps.setTimestamp(3,pomodorosBeanObj.getStartTime());
             ps.setTimestamp(4, pomodorosBeanObj.getEndTime());
             ps.setString(5, pomodorosBeanObj.getComments());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+    }
+    
+    public void insertFriendRequestsBean(FriendRequestsBean friendRequestsBeanObj){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        
+        String sql = "INSERT INTO FriendRequests(Requestor, Requestee, AcceptedStatusBoolean) VALUES(?,?,?)";
+        
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, friendRequestsBeanObj.getRequestor());
+            ps.setString(2,friendRequestsBeanObj.getRequestee());
+            ps.setInt(3,friendRequestsBeanObj.getAcceptedStatusBoolean());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {

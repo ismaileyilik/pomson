@@ -5,6 +5,7 @@
  */
 package backend;
 
+import beans.FriendRequestsBean;
 import beans.FriendsBean;
 import beans.GoalsBean;
 import beans.GroupMembersBean;
@@ -87,8 +88,6 @@ public class ControllerServlet extends HttpServlet {
             modifiedUrl = this.executeJoinGroup(request,response);
         }
         
-        
-        
         else if(action.equals("viewProfile")){
             modifiedUrl = this.executeViewProfile(request,response);
         }
@@ -134,7 +133,6 @@ public class ControllerServlet extends HttpServlet {
         String urlToRedirectTo = "/index.jsp";
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         
-        // code to process the form and create the user account and user roles entries in the appropriate tables
         String username = request.getParameter("Username");
         String password = request.getParameter("Password");
         UsersBean usersBeanObj = new UsersBean();
@@ -157,7 +155,6 @@ public class ControllerServlet extends HttpServlet {
         String urlToRedirectTo = "/secureUser/dashboard.jsp";
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
-        // code to process the form and create the user account and user roles entries in the appropriate tables
         String Username = request.getRemoteUser();
         String goalName = request.getParameter("goalName");
         String goalDescription = request.getParameter("goalDescription");
@@ -180,6 +177,7 @@ public class ControllerServlet extends HttpServlet {
         String Username = request.getRemoteUser();
         String task = request.getParameter("task");
         String comments = request.getParameter("comments");
+
         int goalIDToApplyTo = Integer.parseInt(request.getParameter("goalIDToApplyTo"));
         
         PomodorosBean pomodorosBeanObj = new PomodorosBean();
@@ -217,7 +215,6 @@ public class ControllerServlet extends HttpServlet {
         String urlToRedirectTo = "/secureUser/viewGroups.jsp";
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
-        // code to process the form and create the user account and user roles entries in the appropriate tables
         String username = request.getRemoteUser();
         String groupName = request.getParameter("groupName");
         String description = request.getParameter("groupDescription");
@@ -236,6 +233,9 @@ public class ControllerServlet extends HttpServlet {
         groupsBeanObj.setDescription(description);
         groupsBeanObj.setVerifyBeforeJoining(verifyBeforeJoining);
         databaseDriverObj.insertGroupsBeanObj(groupsBeanObj, username);
+        
+        ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
+        request.setAttribute("groupList", groups);
 
         return urlToRedirectTo;
     }
@@ -244,7 +244,6 @@ public class ControllerServlet extends HttpServlet {
         String urlToRedirectTo = "/secureUser/viewGroups.jsp";
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
-        // code to process the form and create the user account and user roles entries in the appropriate tables
         String username = request.getRemoteUser();
         int groupID = Integer.parseInt(request.getParameter("groupID"));
         GroupMembersBean newGroupMember = new GroupMembersBean();
@@ -271,9 +270,18 @@ public class ControllerServlet extends HttpServlet {
     }
     
     private String executeAddFriend(HttpServletRequest request, HttpServletResponse response) {
-        String urlToRedirectTo = "/secureUser/viewGroups.jsp";
-        
-        
+        String urlToRedirectTo = "/secureUser/viewFriends.jsp";
+                
+        DatabaseDriver databaseDriverObj = new DatabaseDriver();
+        String requestor = request.getRemoteUser();
+        String requestee = request.getParameter("secondFriend");
+        FriendRequestsBean friendRequestsBeanObj = new FriendRequestsBean();
+        friendRequestsBeanObj.setRequestor(requestor);
+        friendRequestsBeanObj.setRequestee(requestee);
+        databaseDriverObj.insertFriendRequestsBean(friendRequestsBeanObj);
+        ArrayList<FriendsBean> friendsList = databaseDriverObj.getFriendsOf(requestor);
+        request.setAttribute("friendsList", friendsList);
+    
         return urlToRedirectTo;
     }
 
