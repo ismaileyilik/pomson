@@ -18,7 +18,7 @@
             <form name="findGroupsForm" method="POST" action="../controllerServerlet">
             <input type="hidden"  name="action" value="findGroupsForm">
             <input type ="text" class = "mediumFont" name="groupName" placeholder="Search for a group...">
-            <button type="submit" value="Submit">Request to Join</button>
+            <button type="submit" value="Submit">Search</button>
             <button type ="button" onclick="goBack()">Cancel</button>
             <script>
                 function goBack() {

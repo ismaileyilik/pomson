@@ -11,6 +11,7 @@ import beans.UserRoleBean;
 import beans.UsersBean;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,14 +51,19 @@ public class DatabaseDriver {
     
     public void insertGoalsBeanObj(GoalsBean goalsBeanObj){
         openConnection();
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO Goals(GroupID, Username, GoalName, Description, StartTime, EndTime) VALUES(?,?,?,?,?,?)";
         
         try{
-            String sql = "INSERT INTO Goals(GoalID, GroupID, Username, GoalName, Description, StartTime, EndTime) VALUES("
-                    + goalsBeanObj.getGoalID() + ", " + goalsBeanObj.getGroupID() + ", '" + goalsBeanObj.getUsername() + "', '" + goalsBeanObj.getGoalName() +
-                    "', '" + goalsBeanObj.getGoalDescription() + "', '" + goalsBeanObj.getStartTime() + "', '" + goalsBeanObj.getStartTime() + "')";
-            Statement s = connection.createStatement();
-            s.executeUpdate (sql);
-            s.close ();
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, goalsBeanObj.getGroupID());
+            ps.setString(2, goalsBeanObj.getUsername());
+            ps.setString(3, goalsBeanObj.getGoalName());
+            ps.setString(4, goalsBeanObj.getGoalDescription());
+            ps.setTimestamp(5, goalsBeanObj.getStartTime());
+            ps.setTimestamp(6, goalsBeanObj.getEndTime());
+            ps.executeUpdate();
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,6 +75,8 @@ public class DatabaseDriver {
     //input needs to be sanitized, the 's in the text for the group name can cause the sql to be messed up. use prepared statement
     public void insertGroupsBeanObj(GroupsBean groupsBeanObj){
         openConnection();
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO Groups(GroupName, Description, VerificationBeforeJoinBoolean) VALUES(?,?,?)" ;
         
         try{
             int booleanAsInt = 0;
@@ -77,11 +85,12 @@ public class DatabaseDriver {
             }else if(groupsBeanObj.getVerifyBeforeJoining() == false){
                 booleanAsInt = 0;
             }
-            String sql = "INSERT INTO Groups(GroupID, GroupName, Description, VerificationBeforeJoinBoolean) VALUES(NULL, '" 
-                    + groupsBeanObj.getGroupName() + "', '" + groupsBeanObj.getDescription() + "', " + booleanAsInt + ")";
-            Statement s = connection.createStatement();
-            s.executeUpdate (sql);
-            s.close ();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, groupsBeanObj.getGroupName());
+            ps.setString(2, groupsBeanObj.getDescription());
+            ps.setInt(3, booleanAsInt);
+            ps.executeUpdate();
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,12 +100,15 @@ public class DatabaseDriver {
     
     public void insertUserRoleBeanObj(UserRoleBean userRoleBeanObj){
         openConnection();
-
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO UserRoles(Username,Role) VALUES(?,?)";
+        
         try{
-            String sql = "INSERT INTO UserRoles(Username,Role) VALUES('" + userRoleBeanObj.getGivenUsername() + "','" + userRoleBeanObj.getUserRole() + "')";
-            Statement s = connection.createStatement();
-            s.executeUpdate (sql);
-            s.close ();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, userRoleBeanObj.getGivenUsername());
+            ps.setString(2, userRoleBeanObj.getUserRole());
+            ps.executeUpdate();
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -105,20 +117,35 @@ public class DatabaseDriver {
     } 
     
     public void insertUsersBeanObj(UsersBean usersBeanObj){
+        Logger.getLogger(DatabaseDriver.class.getName()).log(Level.INFO,"UserName:" + usersBeanObj.getGivenUsername());
         openConnection();
-
+        PreparedStatement ps = null;
+        
+        String sql = "INSERT INTO Users(Username,LoginPassword, PomodoroLengthPreferenceMins, "
+                    + "PomodoroShortBreakPreferenceMins, PomodoroLongBreakPreferenceMins) VALUES(?,?,?,?,?)";
         try{
-            String sql = "INSERT INTO Users(Username,LoginPassword, PomodoroLengthPreferenceMins, PomodoroShortBreakPreferenceMins, PomodoroLongBreakPreferenceMins) VALUES('" 
-                    + usersBeanObj.getGivenUsername() + "','" + usersBeanObj.getGivenPassword() + "'," + usersBeanObj.getPomodoroLengthPreferenceMins() + ", " 
-                    + usersBeanObj.getPomodoroShortBreakPreferenceMins() + ", " + usersBeanObj.getPomodoroLongBreakPreferenceMins() + ")";
-            Statement s = connection.createStatement();
-            s.executeUpdate (sql);
-            s.close ();
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, usersBeanObj.getGivenUsername());
+            ps.setString(2,usersBeanObj.getGivenPassword());
+            ps.setInt(3,usersBeanObj.getPomodoroLengthPreferenceMins());
+            ps.setInt(4,usersBeanObj.getPomodoroShortBreakPreferenceMins());
+            ps.setInt(5,usersBeanObj.getPomodoroLongBreakPreferenceMins());
+            ps.executeUpdate();
+            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         closeConnection();
-    }  
+    }
+    
+    public void searchForGroups(String groupName){
+        openConnection();
+            
+        
+        
+        
+        closeConnection();         
+    }
     
 }

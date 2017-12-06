@@ -83,7 +83,7 @@ public class ControllerServerlet extends HttpServlet {
     }
     
     private String executeUpdateGoalForm(HttpServletRequest request, HttpServletResponse response){
-        String urlToRedirectTo = "/dashboard.jsp";
+        String urlToRedirectTo = "/secureUser/dashboard.jsp";
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         // code to process the form and create the user account and user roles entries in the appropriate tables
@@ -121,6 +121,8 @@ public class ControllerServerlet extends HttpServlet {
 
     private String executeFindGroupsForm(HttpServletRequest request, HttpServletResponse response){
         String urlToRedirectTo = "/dashboard.jsp";
+        String groupName = request.getParameter("groupName");
+        
         return urlToRedirectTo;
     }
 
