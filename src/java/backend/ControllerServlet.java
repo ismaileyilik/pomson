@@ -42,7 +42,10 @@ public class ControllerServlet extends HttpServlet {
         }
         else if( action.equals("updateGoals")){
             modifiedUrl = "/secureUser/updateGoals.jsp";
-            //TODO get infro from DB and pass it with request obj
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+            ArrayList<GroupsBean> membershipGroupIDList = databaseDriverObj.getMembershipOf(username);
+            request.setAttribute("membershipGroupIDList", membershipGroupIDList);
         }
         else if( action.equals("createGroup")){
             modifiedUrl = "/secureUser/createGroup.jsp";
@@ -73,6 +76,9 @@ public class ControllerServlet extends HttpServlet {
         else if(action.equals("joinGroup")){
             modifiedUrl = this.executeJoinGroup(request,response);
         }
+        
+        
+        
         else if(action.equals("viewProfile")){
             modifiedUrl = this.executeViewProfile(request,response);
         }
@@ -146,16 +152,12 @@ public class ControllerServlet extends HttpServlet {
         String goalName = request.getParameter("goalName");
         String goalDescription = request.getParameter("goalDescription");
         int groupIDToApplyTo = Integer.parseInt(request.getParameter("groupIDToApplyTo"));
-        Timestamp startTime;
-        startTime = new Timestamp(System.currentTimeMillis());
-        Timestamp endTime; 
         GoalsBean goalsBeanObj = new GoalsBean();
         goalsBeanObj.setGroupID(groupIDToApplyTo);
         goalsBeanObj.setUsername(Username);
         goalsBeanObj.setGoalName(goalName);
         goalsBeanObj.setGoalDescription(goalDescription);
-        goalsBeanObj.setStartTime(startTime);
-        goalsBeanObj.setEndTime(null);
+
         databaseDriverObj.insertGoalsBeanObj(goalsBeanObj);
         
         return urlToRedirectTo;
