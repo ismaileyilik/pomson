@@ -39,75 +39,75 @@
             <button type="submit" class ="saveButton" value="Submit">Save Pomodoro</button>
         </form>
         </div>
-
-        <script>
-        var isPaused = true;
-        var defaultPomodoroLength = calcMinutesInSeconds(25);
-        var totalSecondsLeft = 5;
-        var minutesLeft = Math.floor(totalSecondsLeft/60);
-        var secondsLeft = totalSecondsLeft % 60;
-        // Update the count down every 1 second
-        var x = setInterval(updateTimer, 1000);
-        document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
-
-
-        //Use jquery for the buttons actions
-        $(document).ready(function(){
-            $(".pause").hide();
-            $(".saveButton").hide();
-        });
-
-        $('.pause').on('click', function(e) {
-            e.preventDefault();
-            isPaused = true;
-            $(".start").show();
-            $(".pause").hide();
-        });
-
-        $('.start').on('click', function(e) {
-            e.preventDefault();
-            isPaused = false;
-            $(".start").hide();
-            $(".pause").show();
-        });
-
-        $('.reset').on('click', function(e) {
-            e.preventDefault();
-            isPaused = true;
-            totalSecondsLeft = defaultPomodoroLength;
-            minutesLeft = Math.floor(totalSecondsLeft/60);
-            secondsLeft = totalSecondsLeft % 60;
-            document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
-            $(".start").show();
-            $(".pause").hide();
-            $(".saveButton").hide();
-        });
         
-        function goBack() {
-            window.history.back();
-        }
+        <script>
+            var isPaused = true;
+            var defaultPomodoroLength = calcMinutesInSeconds(25);
+            var totalSecondsLeft = 5;
+            var minutesLeft = Math.floor(totalSecondsLeft/60);
+            var secondsLeft = totalSecondsLeft % 60;
+            // Update the count down every 1 second
+            var x = setInterval(updateTimer, 1000);
+            document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
 
-        function calcMinutesInSeconds(minutesDesired){
-            var secondsNeeded = 60 * minutesDesired;
-            return secondsNeeded;
-        }
 
-        //Function to handle updating the timer
-        function updateTimer(){
-            if(!isPaused && totalSecondsLeft > 0){
-                totalSecondsLeft -= 1;
+            //Use jquery for the buttons actions
+            $(document).ready(function(){
+                $(".pause").hide();
+                $(".saveButton").hide();
+            });
+
+            $('.pause').on('click', function(e) {
+                e.preventDefault();
+                isPaused = true;
+                $(".start").show();
+                $(".pause").hide();
+            });
+
+            $('.start').on('click', function(e) {
+                e.preventDefault();
+                isPaused = false;
+                $(".start").hide();
+                $(".pause").show();
+
+            });
+
+            $('.reset').on('click', function(e) {
+                e.preventDefault();
+                isPaused = true;
+                totalSecondsLeft = defaultPomodoroLength;
                 minutesLeft = Math.floor(totalSecondsLeft/60);
                 secondsLeft = totalSecondsLeft % 60;
-                // Display the result in the element with id="demo"
                 document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
-                // If the count down is finished, write some text
-                if (secondsLeft <= 0) {
-                  $(".saveButton").show();
-                  clearInterval(x);
+                $(".start").show();
+                $(".pause").hide();
+                $(".saveButton").hide();
+            });
+
+            function goBack() {
+                window.history.back();
+            }
+
+            function calcMinutesInSeconds(minutesDesired){
+                var secondsNeeded = 60 * minutesDesired;
+                return secondsNeeded;
+            }
+
+            //Function to handle updating the timer
+            function updateTimer(){
+                if(!isPaused && totalSecondsLeft > 0){
+                    totalSecondsLeft -= 1;
+                    minutesLeft = Math.floor(totalSecondsLeft/60);
+                    secondsLeft = totalSecondsLeft % 60;
+                    // Display the result in the element with id="demo"
+                    document.getElementById("timer").innerHTML = "Time Left: [" + minutesLeft + " minutes, " + secondsLeft + " seconds]";
+                    // If the count down is finished, write some text
+                    if (secondsLeft <= 0) {
+                      $(".saveButton").show();
+                      clearInterval(x);
+                    }
                 }
             }
-        }
         </script>
-        
     </body>
 </html>

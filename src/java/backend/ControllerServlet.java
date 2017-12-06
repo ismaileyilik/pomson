@@ -9,10 +9,12 @@ import beans.FriendsBean;
 import beans.GoalsBean;
 import beans.GroupMembersBean;
 import beans.GroupsBean;
+import beans.PomodorosBean;
 import beans.UserRoleBean;
 import beans.UsersBean;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -173,12 +175,21 @@ public class ControllerServlet extends HttpServlet {
 
     private String executeSavePomodoroForm(HttpServletRequest request, HttpServletResponse response){
         String urlToRedirectTo = "/secureUser/dashboard.jsp";
+        DatabaseDriver databaseDriverObj = new DatabaseDriver();
         
         String Username = request.getRemoteUser();
         String task = request.getParameter("task");
         String comments = request.getParameter("comments");
-        String goalIDToApplyTo = request.getParameter("goalIDToApplyTo");
-       
+        int goalIDToApplyTo = Integer.parseInt(request.getParameter("goalIDToApplyTo"));
+        
+        PomodorosBean pomodorosBeanObj = new PomodorosBean();
+        pomodorosBeanObj.setGoalID(goalIDToApplyTo);
+        pomodorosBeanObj.setTaskDescription(task);
+        pomodorosBeanObj.setStartTime(new Timestamp(System.currentTimeMillis()));
+        pomodorosBeanObj.setEndTime(new Timestamp(System.currentTimeMillis()));
+        pomodorosBeanObj.setComments(comments);
+        databaseDriverObj.insertPomodorosBean(pomodorosBeanObj);
+        
         return urlToRedirectTo;
     }
 

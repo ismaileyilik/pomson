@@ -9,6 +9,7 @@ import beans.FriendsBean;
 import beans.GoalsBean;
 import beans.GroupMembersBean;
 import beans.GroupsBean;
+import beans.PomodorosBean;
 import beans.UserRoleBean;
 import beans.UsersBean;
 import java.sql.CallableStatement;
@@ -315,6 +316,28 @@ public class DatabaseDriver {
     
         closeConnection();  
         return returnList;
+    }
+    
+    public void insertPomodorosBean(PomodorosBean pomodorosBeanObj){
+        openConnection();
+        PreparedStatement ps = null;
+        
+        
+        String sql = "INSERT INTO Pomodoros(GoalID, TaskDescription, StartTime, EndTime, Comments) VALUES(?,?,?,?,?)";
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, pomodorosBeanObj.getGoalID());
+            ps.setString(2,pomodorosBeanObj.getTaskDescription());
+            ps.setTimestamp(3,pomodorosBeanObj.getStartTime());
+            ps.setTimestamp(4, pomodorosBeanObj.getEndTime());
+            ps.setString(5, pomodorosBeanObj.getComments());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
     }
     
 }
