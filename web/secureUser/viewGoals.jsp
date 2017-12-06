@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +14,26 @@
         <title>View Goals</title>
     </head>
     <body>
-        Goals for <%= request.getRemoteUser() %> will be listed here
+        
+        <h1> Goals for <%= request.getRemoteUser() %> </h1>
+        <table>
+            <tr>
+                <th style="margin-right:10px;">Goal Name</th>
+                <th style="margin-right:10px;">Group ID/Name(Optional)</th>
+                <th style="margin-right:10px;">Description</th>
+                <th style="margin-right:10px;">Start Time</th>
+                <th style="margin-right:10px;">Actions</th>
+            </tr>
+
+            <c:forEach var="goal" items="${goalsList}">
+            <tr>
+                <td>${goal.goalName}</td>
+                <td>${goal.groupID}</td>
+                <td>${goal.goalDescription}</td>
+                <td>${goal.startTime}</td>
+                <td><a href="<c:url value='/controllerServlet?action=pomodoroSession&goalID=${goal.goalID}'/>">Start Pomodoro!</a></td>
+            </tr>
+            </c:forEach>
+        </table>
     </body>
 </html>

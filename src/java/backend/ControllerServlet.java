@@ -34,7 +34,10 @@ public class ControllerServlet extends HttpServlet {
         
         if( action.equals("viewGoals")){
             modifiedUrl = "/secureUser/viewGoals.jsp";
-            //TODO get infro from DB and pass it with request obj
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+            ArrayList<GoalsBean> goalsList = databaseDriverObj.getGoalsOf(username);
+            request.setAttribute("goalsList", goalsList);
         }
         else if( action.equals("pomodoroSession")){
             modifiedUrl = "/secureUser/pomodoroSession.jsp";
