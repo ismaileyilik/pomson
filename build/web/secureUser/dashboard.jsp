@@ -12,14 +12,14 @@
         <title>User Dashboard</title>
     </head>
     <body>
-        <p>Start a Pomodoro <a href="/controllerServerlet?action=pomodoroSession" >here</a></p>
-        <p>View Goals <a href="/controllerServerlet?action=viewGoals" >here</a></p>
-        <p>Edit Goals <a href="/controllerServerlet?action=updateGoals" >here</a></p>
-        <p>Create a Group <a href="/controllerServerlet?action=createGroup" >here</a></p>
-        <p>Find Groups <a href="/controllerServerlet?action=findGroups" >here</a></p>
-        <p>View Groups <a href="/controllerServerlet?action=viewGroups" >here</a></p>
-        <p>Add Friends <a href="/controllerServerlet?action=findFriends" >here</a></p>
-        <p>View Friends <a href="/controllerServerlet?action=viewFriends" >here</a></p>
+        <p>Start a Pomodoro <a href="/controllerServlet?action=pomodoroSession" >here</a></p>
+        <p>View Goals <a href="/controllerServlet?action=viewGoals" >here</a></p>
+        <p>Edit Goals <a href="/controllerServlet?action=updateGoals" >here</a></p>
+        <p>Create a Group <a href="/controllerServlet?action=createGroup" >here</a></p>
+        <p>Find Groups <a href="/controllerServlet?action=findGroups" >here</a></p>
+        <p>View Groups <a href="/controllerServlet?action=viewGroups" >here</a></p>
+        <p>Add Friends <a href="/controllerServlet?action=findFriends" >here</a></p>
+        <p>View Friends <a href="/controllerServlet?action=viewFriends" >here</a></p>
 
     </body>
 </html>

@@ -17,7 +17,7 @@
     <body>
         <div class = "centeredText"> <h1> Create a New Account </h1> </div>
         <div class = "centeredText">
-            <form name="signupForm" method="POST" action="controllerServerlet">
+            <form name="signupForm" method="POST" action="controllerServlet">
               <input type="hidden"  name="action" value="signupForm">
               <input type="text" name ="Username" class = "mediumFont" placeholder="Enter your desired username..."> <br>
               <input type="password" name ="Password" class = "mediumFont" placeholder="Enter your desired password..."> <br>

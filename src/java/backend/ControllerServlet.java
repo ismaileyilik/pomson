@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author colton
  */
-@WebServlet("/controllerServerlet")
-public class ControllerServerlet extends HttpServlet {
+@WebServlet("/controllerServlet")
+public class ControllerServlet extends HttpServlet {
     
  
     @Override

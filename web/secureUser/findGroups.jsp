@@ -16,7 +16,7 @@
     <body>
         <h1> <div class = "centeredText"> Search for a Group </div> </h1>
         <div class = "centeredText"> 
-            <form name="findGroupsForm" method="POST" action="../controllerServerlet">
+            <form name="findGroupsForm" method="POST" action="../controllerServlet">
             <input type="hidden"  name="action" value="findGroupsForm">
             <input type ="text" class = "mediumFont" name="groupName" placeholder="Search for a group...">
             <button type="submit" value="Submit">Search</button>
@@ -41,7 +41,7 @@
                     <td>${group.groupName}</td>
                     <td>${group.description}</td>
                     <td>${group.verifyBeforeJoining}</td>
-                    <td><a href="<c:url value='/controllerServerlet?action=joinGroup&groupID=${group.groupID}'/>">Join</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=joinGroup&groupID=${group.groupID}'/>">Join</a></td>
                 </tr>
             </c:forEach>
             </table>

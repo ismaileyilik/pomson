@@ -24,7 +24,7 @@
         --> 
         <h1> <div class = "centeredText"> Create a New Goal </div> </h1>
         <div class = "centeredText"> 
-        <form name="updateGoalForm" method="POST" action="../controllerServerlet">
+        <form name="updateGoalForm" method="POST" action="../controllerServlet">
             <input type="hidden"  name="action" value="updateGoalForm">
             Goal Name: <br>
             <input type ="text" class = "mediumFont" name="goalName"> <br>

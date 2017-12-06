@@ -27,8 +27,8 @@
                     <td>${group.groupName}</td>
                     <td>${group.description}</td>
                     <td>${group.verifyBeforeJoining}</td>
-                    <td><a href="<c:url value='/controllerServerlet?action=viewGroup&groupID=${group.groupID}'/>">View</a></td>
-                    <td><a href="<c:url value='/controllerServerlet?action=leaveGroup&groupID=${group.groupID}'/>">Leave</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=viewGroup&groupID=${group.groupID}'/>">View</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=leaveGroup&groupID=${group.groupID}'/>">Leave</a></td>
                 </tr>
             </c:forEach>
             </table>
