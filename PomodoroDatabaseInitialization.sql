@@ -1,4 +1,7 @@
 CREATE DATABASE IF NOT EXISTS PomodoroDatabase;
+DROP PROCEDURE IF EXISTS CreateGroupFirstTime;
+DROP VIEW IF EXISTS GroupMemberGroups;
+DROP TRIGGER IF EXISTS ProcessFriendRequests;
 DROP TABLE IF EXISTS UserRoles;
 DROP TABLE IF EXISTS GroupMembers;
 DROP TABLE IF EXISTS Friends;
@@ -7,7 +10,6 @@ DROP TABLE IF EXISTS Pomodoros;
 DROP TABLE IF EXISTS Goals;
 DROP TABLE IF EXISTS Groups;
 DROP TABLE IF EXISTS Users;
-DROP VIEW IF EXISTS GroupMemberGroups;
 
 SET SQL_MODE='ALLOW_INVALID_DATES';
 
@@ -62,7 +64,7 @@ GroupID int(10),
 Username varchar(255),
 GoalName varchar(255),
 Description varchar(255),
-StartTime timestamp NOT NULL,
+StartTime timestamp,
 EndTime timestamp,
 FOREIGN KEY (GroupId) REFERENCES Groups(GroupID),
 FOREIGN KEY (Username) REFERENCES Users(Username));
@@ -92,5 +94,19 @@ ELSEIF NEW.StatusBoolean = 1 THEN
 	DELETE FROM FriendRequests WHERE NEW.Requestor = Requestor and NEW.Requestee = Requestee;
 END IF;
 ;;
+DELIMITER ;
+
+DELIMITER ;;
+CREATE PROCEDURE CreateGroupFirstTime
+(IN GroupName varchar(255),
+IN Description varchar(255),
+IN VerificationBeforeJoinBoolean tinyint(1),
+IN Username varchar(255))
+BEGIN
+	DECLARE keyPrimary Int;
+	INSERT INTO Groups(GroupName, Description, VerificationBeforeJoinBoolean) VALUES(GroupName, Description, VerificationBeforeJoinBoolean);
+    SET keyPrimary = LAST_INSERT_ID();
+    INSERT INTO GroupMembers(GroupID, GroupMember, GroupRole) VALUES(keyPrimary, Username, 'Admin');
+END ;;
 DELIMITER ;
 

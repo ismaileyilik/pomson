@@ -11,6 +11,7 @@ import beans.GroupMembersBean;
 import beans.GroupsBean;
 import beans.UserRoleBean;
 import beans.UsersBean;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -76,30 +77,24 @@ public class DatabaseDriver {
     
     
     //input needs to be sanitized, the 's in the text for the group name can cause the sql to be messed up. use prepared statement
-    public void insertGroupsBeanObj(GroupsBean groupsBeanObj){
+    public void insertGroupsBeanObj(GroupsBean groupsBeanObj, String username){
         openConnection();
         
-        PreparedStatement ps = null;
-        String sql = "INSERT INTO Groups(GroupName, Description, VerificationBeforeJoinBoolean) VALUES(?,?,?)" ;
-        
-        try{
-            int booleanAsInt = 0;
-            if(groupsBeanObj.getVerifyBeforeJoining() == true){
-                booleanAsInt = 1;
-            }else if(groupsBeanObj.getVerifyBeforeJoining() == false){
-                booleanAsInt = 0;
-            }
-            ps = connection.prepareStatement(sql);
-            ps.setString(1, groupsBeanObj.getGroupName());
-            ps.setString(2, groupsBeanObj.getDescription());
-            ps.setInt(3, booleanAsInt);
-            ps.executeUpdate();
-            ps.close();
+        CallableStatement stmt = null;
+        try {
+            stmt = connection.prepareCall("{CALL CreateGroupFirstTime(?,?,?,?)}");
+            stmt.setString(1, groupsBeanObj.getGroupName());
+            stmt.setString(2, groupsBeanObj.getDescription());
+            stmt.setBoolean(3, groupsBeanObj.getVerifyBeforeJoining());
+            stmt.setString(4, username);
+            stmt.execute();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         closeConnection();
+        
+        
     }
     
     public void insertUserRoleBeanObj(UserRoleBean userRoleBeanObj){

@@ -207,7 +207,7 @@ public class ControllerServlet extends HttpServlet {
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         // code to process the form and create the user account and user roles entries in the appropriate tables
-        String Username = request.getRemoteUser();
+        String username = request.getRemoteUser();
         String groupName = request.getParameter("groupName");
         String description = request.getParameter("groupDescription");
         
@@ -224,8 +224,8 @@ public class ControllerServlet extends HttpServlet {
         groupsBeanObj.setGroupName(groupName);
         groupsBeanObj.setDescription(description);
         groupsBeanObj.setVerifyBeforeJoining(verifyBeforeJoining);
-        databaseDriverObj.insertGroupsBeanObj(groupsBeanObj);
-        
+        databaseDriverObj.insertGroupsBeanObj(groupsBeanObj, username);
+
         return urlToRedirectTo;
     }
 
