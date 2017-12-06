@@ -2,6 +2,9 @@ CREATE DATABASE IF NOT EXISTS PomodoroDatabase;
 DROP PROCEDURE IF EXISTS CreateGroupFirstTime;
 DROP VIEW IF EXISTS GroupMemberGroups;
 DROP TRIGGER IF EXISTS ProcessFriendRequests;
+DROP TRIGGER IF EXISTS AddUserRole;
+DROP FUNCTION IF EXISTS CountNumPomodorosForGoal;
+DROP FUNCTION IF EXISTS CheckIfInUserRoles;
 DROP TABLE IF EXISTS UserRoles;
 DROP TABLE IF EXISTS GroupMembers;
 DROP TABLE IF EXISTS Friends;
@@ -51,7 +54,7 @@ PRIMARY KEY (FirstFriend, SecondFriend));
 CREATE TABLE IF NOT EXISTS FriendRequests(
 Requestor varchar(255),
 Requestee varchar(255),
-StatusBoolean tinyint(1),
+AcceptedStatusBoolean tinyint(1),
 DateRequested timestamp,
 FOREIGN KEY (Requestor) REFERENCES Users(Username),
 FOREIGN KEY (Requestee) REFERENCES Users(Username), 
@@ -59,7 +62,7 @@ PRIMARY KEY (Requestor, Requestee));
 
 
 CREATE TABLE IF NOT EXISTS Goals(
-GoalID int(10) PRIMARY KEY AUTO_INCREMENT,
+GoalID int(10) PRIMARY KEY AUTO_INCREMENT UNIQUE,
 GroupID int(10),
 Username varchar(255),
 GoalName varchar(255),
@@ -71,14 +74,13 @@ FOREIGN KEY (Username) REFERENCES Users(Username));
 
 
 CREATE TABLE IF NOT EXISTS Pomodoros(
+PomodoroID int(10) PRIMARY KEY AUTO_INCREMENT UNIQUE,
 GoalID int(10),
-PomodoroID int(10),
 TaskDescription varchar(255),
 StartTime timestamp,
 EndTime timestamp,
 Comments varchar(255),
-FOREIGN KEY (GoalID) REFERENCES Goals(GoalID),
-PRIMARY KEY (GoalID, PomodoroID));
+FOREIGN KEY (GoalID) REFERENCES Goals(GoalID));
 
 CREATE VIEW GroupMemberGroups AS SELECT gm.GroupMember,gm.GroupRole,gm.JoinDate,g.GroupID,g.GroupName,g.Description,g.VerificationBeforeJoinBoolean
 FROM GroupMembers gm INNER JOIN Groups g ON gm.GroupID = g.GroupID;
@@ -87,12 +89,33 @@ FROM GroupMembers gm INNER JOIN Groups g ON gm.GroupID = g.GroupID;
 DELIMITER ;;
 CREATE TRIGGER ProcessFriendRequests AFTER UPDATE ON FriendRequests
 FOR EACH ROW 
-IF NEW.StatusBoolean = 0 THEN
+IF NEW.AcceptedStatusBoolean = 0 THEN
 	DELETE FROM FriendRequests WHERE NEW.Requestor = Requestor and NEW.Requestee = Requestee;
-ELSEIF NEW.StatusBoolean = 1 THEN
+ELSEIF NEW.AcceptedStatusBoolean = 1 THEN
 	INSERT INTO Friends(FirstFriend, SecondFriend) VALUES(NEW.Requestor, NEW.Requestee);
 	DELETE FROM FriendRequests WHERE NEW.Requestor = Requestor and NEW.Requestee = Requestee;
 END IF;
+;;
+DELIMITER ;
+
+DELIMITER ;;
+CREATE FUNCTION CheckIfInUserRoles(username varchar(255)) RETURNS INT
+BEGIN
+	DECLARE existsBool INT;
+    SET existsBool = (SELECT COUNT(*) FROM UserRoles ur WHERE ur.Username = username);
+    RETURN existsBool;
+END;;
+DELIMITER ;
+
+DELIMITER ;;
+CREATE TRIGGER AddUserRole AFTER INSERT ON Users
+FOR EACH ROW BEGIN
+	DECLARE username varchar(255);
+	SET username = (SELECT u1.Username from Users u1);
+    IF (CheckIfInUserRoles(username) = 0) THEN
+		INSERT INTO UserRoles(Username, Role) VALUES(username, 'UserRole');
+    END IF;
+    END;
 ;;
 DELIMITER ;
 
@@ -109,4 +132,15 @@ BEGIN
     INSERT INTO GroupMembers(GroupID, GroupMember, GroupRole) VALUES(keyPrimary, Username, 'Admin');
 END ;;
 DELIMITER ;
+
+DELIMITER ;;
+CREATE FUNCTION CountNumPomodorosForGoal(goalID Int) RETURNS INT
+BEGIN
+	DECLARE totalPoms INT;
+    SET totalPoms = (SELECT COUNT(PomodoroID) FROM Pomodoros p, Goals g WHERE p.goalID = g.goalID);
+    RETURN totalPoms;
+END;;
+DELIMITER ;
+
+    
 

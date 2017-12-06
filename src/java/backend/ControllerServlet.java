@@ -143,11 +143,6 @@ public class ControllerServlet extends HttpServlet {
         usersBeanObj.setPomodoroLongBreakPreferenceMins(10);
         databaseDriverObj.insertUsersBeanObj(usersBeanObj);
         
-        UserRoleBean userRolesBeanObj = new UserRoleBean();
-        userRolesBeanObj.setUsername(username);
-        userRolesBeanObj.setUserRole("UserRole");
-        databaseDriverObj.insertUserRoleBeanObj(userRolesBeanObj);
-        
         return urlToRedirectTo;
     }
     
