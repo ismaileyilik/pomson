@@ -25,7 +25,6 @@
             Apply Goal to Group[Optional]:
             <select name = "groupIDToApplyTo">
                 <option value=0>None</option>
-                <option value=1>None 2</option>
                 <c:forEach var="group" items="${membershipGroupIDList}">
                     <option value="${group.groupID}"/>${group.groupName}</option>
                 </c:forEach>

@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,8 +27,10 @@
             <textarea class = "mediumFont" rows="4" cols="60" name="comments"> </textarea> <br>
             Apply Task to Goal:
             <select name = "goalIDToApplyTo">
-                <option value="Goal 1">Goal 1</option>
-                <option value="Goal 2">Goal 2</option>
+                <option value=0>None</option>
+                <c:forEach var="goal" items="${goalsList}">
+                    <option value="${goal.goalID}"/>${goal.goalName}</option>
+                </c:forEach>
             </select> <br> <br>
             <button class="start">Start</button>
             <button class="pause">Pause</button>

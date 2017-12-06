@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -282,6 +283,41 @@ public class DatabaseDriver {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        closeConnection();  
+        return returnList;
+    }
+    
+    public ArrayList<GoalsBean> getGoalsOf(String username){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ResultSet rs  = null;
+        String sql = "SELECT * FROM Goals WHERE Username = ?";
+        ArrayList<GoalsBean> returnList = new ArrayList<>();
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                int goalID = rs.getInt("GoalID");
+                int groupID = rs.getInt("GroupID");
+                String goalName = rs.getString("GoalName");
+                String goalDescription = rs.getString("Description");
+                Timestamp startTime = rs.getTimestamp("StartTime");
+                GoalsBean goalsBeanObj = new GoalsBean();
+                goalsBeanObj.setGoalID(goalID);
+                goalsBeanObj.setGroupID(groupID);
+                goalsBeanObj.setUsername(username);
+                goalsBeanObj.setGoalName(goalName);
+                goalsBeanObj.setGoalDescription(goalDescription);
+                goalsBeanObj.setStartTime(startTime);
+                returnList.add(goalsBeanObj);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
         closeConnection();  
         return returnList;
     }

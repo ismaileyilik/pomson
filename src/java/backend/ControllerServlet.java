@@ -38,6 +38,11 @@ public class ControllerServlet extends HttpServlet {
         }
         else if( action.equals("pomodoroSession")){
             modifiedUrl = "/secureUser/pomodoroSession.jsp";
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+            ArrayList<GoalsBean> goalsList = databaseDriverObj.getGoalsOf(username);
+            request.setAttribute("goalsList", goalsList);
+            
             //TODO get infro from DB and pass it with request obj
         }
         else if( action.equals("updateGoals")){
