@@ -6,11 +6,14 @@
 package backend;
 
 import beans.GoalsBean;
+import beans.GroupMembersBean;
 import beans.GroupsBean;
 import beans.UserRoleBean;
 import beans.UsersBean;
+import com.sun.istack.internal.logging.Logger;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +31,51 @@ public class ControllerServerlet extends HttpServlet {
  
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        String modifiedUrl = "/index.jsp";
         
+        if( action.equals("viewGoals")){
+            modifiedUrl = "/secureUser/viewGoals.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("pomodoroSession")){
+            modifiedUrl = "/secureUser/pomodoroSession.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("updateGoals")){
+            modifiedUrl = "/secureUser/updateGoals.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("createGroup")){
+            modifiedUrl = "/secureUser/createGroup.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("findGroups")){
+            modifiedUrl = "/secureUser/findGroups.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("viewGroups")){
+            modifiedUrl = "/secureUser/viewGroups.jsp";
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+            ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
+            request.setAttribute("groupList", groups);
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("findFriends")){
+            modifiedUrl = "/secureUser/findFriends.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+        else if( action.equals("viewFriends")){
+            modifiedUrl = "/secureUser/viewFriends.jsp";
+            //TODO get infro from DB and pass it with request obj
+        }
+         else if(action.equals("joinGroup")){
+            modifiedUrl = this.executeJoinGroup(request,response);
+        }
+        
+        
+        getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response); 
     }
     
     @Override
@@ -55,6 +102,7 @@ public class ControllerServerlet extends HttpServlet {
         else if(formAction.equals("updateGoalForm")){
             modifiedUrl = this.executeUpdateGoalForm(request, response);
         }
+       
         
         getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response);
     }
@@ -91,7 +139,6 @@ public class ControllerServerlet extends HttpServlet {
         String goalName = request.getParameter("goalName");
         String goalDescription = request.getParameter("goalDescription");
         int groupIDToApplyTo = Integer.parseInt(request.getParameter("groupIDToApplyTo"));
-        Date today = new java.util.Date();
         Timestamp startTime;
         startTime = new Timestamp(System.currentTimeMillis());
         Timestamp endTime; 
@@ -108,7 +155,7 @@ public class ControllerServerlet extends HttpServlet {
     }
 
     private String executeSavePomodoroForm(HttpServletRequest request, HttpServletResponse response){
-        String urlToRedirectTo = "/dashboard.jsp";
+        String urlToRedirectTo = "/secureUser/dashboard.jsp";
         
         String Username = request.getRemoteUser();
         String task = request.getParameter("task");
@@ -120,14 +167,15 @@ public class ControllerServerlet extends HttpServlet {
     }
 
     private String executeFindGroupsForm(HttpServletRequest request, HttpServletResponse response){
-        String urlToRedirectTo = "/dashboard.jsp";
+        String urlToRedirectTo = "/secureUser/findGroups.jsp";
         String groupName = request.getParameter("groupName");
-        
+        ArrayList<GroupsBean> foundGroupsList = new DatabaseDriver().searchForGroups(groupName);
+        request.setAttribute("groupList", foundGroupsList);
         return urlToRedirectTo;
     }
 
     private String executeAddFriendForm(HttpServletRequest request, HttpServletResponse response){
-        String urlToRedirectTo = "/dashboard.jsp";
+        String urlToRedirectTo = "/secureUser/dashboard.jsp";
         return urlToRedirectTo;
     }
 
@@ -156,5 +204,27 @@ public class ControllerServerlet extends HttpServlet {
         databaseDriverObj.insertGroupsBeanObj(groupsBeanObj);
         return urlToRedirectTo;
     }
+
+    private String executeJoinGroup(HttpServletRequest request, HttpServletResponse response) {
+        String urlToRedirectTo = "/secureUser/viewGroups.jsp";
+        
+        DatabaseDriver databaseDriverObj = new DatabaseDriver();
+        // code to process the form and create the user account and user roles entries in the appropriate tables
+        String username = request.getRemoteUser();
+        int groupID = Integer.parseInt(request.getParameter("groupID"));
+        GroupMembersBean newGroupMember = new GroupMembersBean();
+        newGroupMember.setGroupID(groupID);
+        newGroupMember.setGroupMemberUsername(username);
+        newGroupMember.setGroupRole("Member");
+
+        databaseDriverObj.insertGroupMembersBean(newGroupMember);
+        //TODO call DB and get list of groups that this user is in so we can pass it onto the viewGroups.jsp
+        ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
+        request.setAttribute("groupList", groups);
+        
+  
+        return urlToRedirectTo;
+    }
+    
 
 }

@@ -6,6 +6,7 @@
 package backend;
 
 import beans.GoalsBean;
+import beans.GroupMembersBean;
 import beans.GroupsBean;
 import beans.UserRoleBean;
 import beans.UsersBean;
@@ -15,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +54,7 @@ public class DatabaseDriver {
     public void insertGoalsBeanObj(GoalsBean goalsBeanObj){
         openConnection();
         PreparedStatement ps = null;
-        String sql = "INSERT INTO Goals(GroupID, Username, GoalName, Description, StartTime, EndTime) VALUES(?,?,?,?,?,?)";
+        String sql = "INSERT INTO Goals(GroupID, Username, GoalName, Description) VALUES(?,?,?,?)";
         
         try{
             ps = connection.prepareStatement(sql);
@@ -60,8 +62,6 @@ public class DatabaseDriver {
             ps.setString(2, goalsBeanObj.getUsername());
             ps.setString(3, goalsBeanObj.getGoalName());
             ps.setString(4, goalsBeanObj.getGoalDescription());
-            ps.setTimestamp(5, goalsBeanObj.getStartTime());
-            ps.setTimestamp(6, goalsBeanObj.getEndTime());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
@@ -117,7 +117,6 @@ public class DatabaseDriver {
     } 
     
     public void insertUsersBeanObj(UsersBean usersBeanObj){
-        Logger.getLogger(DatabaseDriver.class.getName()).log(Level.INFO,"UserName:" + usersBeanObj.getGivenUsername());
         openConnection();
         PreparedStatement ps = null;
         
@@ -139,13 +138,86 @@ public class DatabaseDriver {
         closeConnection();
     }
     
-    public void searchForGroups(String groupName){
+    public ArrayList<GroupsBean> searchForGroups(String groupName){
         openConnection();
-            
+        PreparedStatement ps = null;
+        ResultSet rs  = null;
+        String sql = "SELECT * FROM Groups WHERE GroupName LIKE ?";
+        ArrayList<GroupsBean> returnList = new ArrayList<>();
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, "%"+groupName+"%");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String name = rs.getString("GroupName");
+                int groupId = rs.getInt("GroupID");
+                String description = rs.getString("Description");
+                boolean verificationBeforeJoinBoolean = rs.getBoolean("VerificationBeforeJoinBoolean");
+                GroupsBean newGroup = new GroupsBean();
+                newGroup.setGroupName(name);
+                newGroup.setGroupID(groupId);
+                newGroup.setDescription(description);
+                newGroup.setVerifyBeforeJoining(verificationBeforeJoinBoolean);
+                returnList.add(newGroup);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         
-        closeConnection();         
+        closeConnection();  
+        return returnList;
+    }
+    public ArrayList<GroupsBean> getMembershipOf(String userName){
+        openConnection();
+        PreparedStatement ps = null;
+        ResultSet rs  = null;
+        String sql = "SELECT * FROM GroupMemberGroups WHERE GroupMember = ?";
+        ArrayList<GroupsBean> returnList = new ArrayList<>();
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, userName);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                String name = rs.getString("GroupName");
+                int groupId = rs.getInt("GroupID");
+                String description = rs.getString("Description");
+                boolean verificationBeforeJoinBoolean = rs.getBoolean("VerificationBeforeJoinBoolean");
+                GroupsBean newGroup = new GroupsBean();
+                newGroup.setGroupName(name);
+                newGroup.setGroupID(groupId);
+                newGroup.setDescription(description);
+                newGroup.setVerifyBeforeJoining(verificationBeforeJoinBoolean);
+                returnList.add(newGroup);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+        closeConnection();  
+        return returnList;
+    }
+    
+    public void insertGroupMembersBean(GroupMembersBean groupMembersBeanObj){
+        openConnection();
+        PreparedStatement ps = null;
+        
+        String sql = "INSERT INTO GroupMembers(GroupID, GroupMember, GroupRole) VALUES(?,?,?)";
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, groupMembersBeanObj.getGroupID());
+            ps.setString(2,groupMembersBeanObj.getGroupMemberUsername());
+            ps.setString(3,groupMembersBeanObj.getGroupRole());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
     }
     
 }

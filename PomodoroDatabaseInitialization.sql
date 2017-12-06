@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS Pomodoros;
 DROP TABLE IF EXISTS Goals;
 DROP TABLE IF EXISTS Groups;
 DROP TABLE IF EXISTS Users;
+DROP VIEW IF EXISTS GroupMemberGroups;
 
 SET SQL_MODE='ALLOW_INVALID_DATES';
 
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS GroupMembers(
 GroupID int(10), 
 GroupMember varchar(255),
 GroupRole varchar(255),
-JoinDate timestamp,
+JoinDate timestamp NOT NULL,
 FOREIGN KEY (GroupID) REFERENCES Groups(GroupID),
 FOREIGN KEY (GroupMember) REFERENCES Users(Username),
 PRIMARY KEY(GroupID, GroupMember));
@@ -61,7 +62,7 @@ GroupID int(10),
 Username varchar(255),
 GoalName varchar(255),
 Description varchar(255),
-StartTime timestamp,
+StartTime timestamp NOT NULL,
 EndTime timestamp,
 FOREIGN KEY (GroupId) REFERENCES Groups(GroupID),
 FOREIGN KEY (Username) REFERENCES Users(Username));
@@ -77,5 +78,19 @@ Comments varchar(255),
 FOREIGN KEY (GoalID) REFERENCES Goals(GoalID),
 PRIMARY KEY (GoalID, PomodoroID));
 
+CREATE VIEW GroupMemberGroups AS SELECT gm.GroupMember,gm.GroupRole,gm.JoinDate,g.GroupID,g.GroupName,g.Description,g.VerificationBeforeJoinBoolean
+FROM GroupMembers gm INNER JOIN Groups g ON gm.GroupID = g.GroupID;
 
+
+DELIMITER ;;
+CREATE TRIGGER ProcessFriendRequests AFTER UPDATE ON FriendRequests
+FOR EACH ROW 
+IF NEW.StatusBoolean = 0 THEN
+	DELETE FROM FriendRequests WHERE NEW.Requestor = Requestor and NEW.Requestee = Requestee;
+ELSEIF NEW.StatusBoolean = 1 THEN
+	INSERT INTO Friends(FirstFriend, SecondFriend) VALUES(NEW.Requestor, NEW.Requestee);
+	DELETE FROM FriendRequests WHERE NEW.Requestor = Requestor and NEW.Requestee = Requestee;
+END IF;
+;;
+DELIMITER ;
 

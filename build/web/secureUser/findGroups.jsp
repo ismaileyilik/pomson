@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,6 +28,24 @@
             </script> 
             </form> 
         </div>
+        <h1> Found Groups </h1> <br> <br>
+        <table>
+            <tr>
+                <th style="margin-right:5px;">Group Name</th>
+                <th style="margin-right:5px;">Description</th>
+                <th style="margin-right:5px;">Verify before Joining</th>
+            </tr>
+
+            <c:forEach var="group" items="${groupList}">
+                <tr>
+                    <td>${group.groupName}</td>
+                    <td>${group.description}</td>
+                    <td>${group.verifyBeforeJoining}</td>
+                    <td><a href="<c:url value='/controllerServerlet?action=joinGroup&groupID=${group.groupID}'/>">Join</a></td>
+                </tr>
+            </c:forEach>
+            </table>
+        
         <h1> Pending Group Requests </h1> <br> <br>
     </body>
 </html>

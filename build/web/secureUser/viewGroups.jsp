@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -12,6 +14,23 @@
         <title>View Groups</title>
     </head>
     <body>
-        Groups that <%= request.getRemoteUser() %> is a member of will be listed here
+        <h1> Groups that <%= request.getRemoteUser() %> is a member of </h1>
+        <table>
+            <tr>
+                <th style="margin-right:5px;">Group Name</th>
+                <th style="margin-right:5px;">Description</th>
+                <th style="margin-right:5px;">Verify before Joining</th>
+            </tr>
+
+            <c:forEach var="group" items="${groupList}">
+                <tr>
+                    <td>${group.groupName}</td>
+                    <td>${group.description}</td>
+                    <td>${group.verifyBeforeJoining}</td>
+                    <td><a href="<c:url value='/controllerServerlet?action=viewGroup&groupID=${group.groupID}'/>">View</a></td>
+                    <td><a href="<c:url value='/controllerServerlet?action=leaveGroup&groupID=${group.groupID}'/>">Leave</a></td>
+                </tr>
+            </c:forEach>
+            </table>
     </body>
 </html>

@@ -12,14 +12,14 @@
         <title>User Dashboard</title>
     </head>
     <body>
-        <p>Start a Pomodoro <a href="pomodoroSession.jsp" >here</a></p>
-        <p>View Goals <a href="viewGoals.jsp" >here</a></p>
-        <p>Edit Goals <a href="updateGoals.jsp" >here</a></p>
-        <p>Create a Group <a href="createGroup.jsp" >here</a></p>
-        <p>Find Groups <a href="findGroups.jsp" >here</a></p>
-        <p>View Groups <a href="viewGroups.jsp" >here</a></p>
-        <p>Add Friends <a href="findFriends.jsp" >here</a></p>
-        <p>View Friends <a href="viewFriends.jsp" >here</a></p>
+        <p>Start a Pomodoro <a href="/controllerServerlet?action=pomodoroSession" >here</a></p>
+        <p>View Goals <a href="/controllerServerlet?action=viewGoals" >here</a></p>
+        <p>Edit Goals <a href="/controllerServerlet?action=updateGoals" >here</a></p>
+        <p>Create a Group <a href="/controllerServerlet?action=createGroup" >here</a></p>
+        <p>Find Groups <a href="/controllerServerlet?action=findGroups" >here</a></p>
+        <p>View Groups <a href="/controllerServerlet?action=viewGroups" >here</a></p>
+        <p>Add Friends <a href="/controllerServerlet?action=findFriends" >here</a></p>
+        <p>View Friends <a href="/controllerServerlet?action=viewFriends" >here</a></p>
 
     </body>
 </html>
