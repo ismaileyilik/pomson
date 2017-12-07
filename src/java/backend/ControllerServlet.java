@@ -99,11 +99,8 @@ public class ControllerServlet extends HttpServlet {
         else if(action.equals("addFriend")){
             modifiedUrl = this.executeAddFriend(request,response);
         }
-        else if(action.equals("denyIncomingFriendRequest")){
-            modifiedUrl = this.executeIncomingDenyRequest(request,response);
-        }
-        else if(action.equals("denyOutgoingFriendRequest")){
-            modifiedUrl = this.executeOutgoingDenyRequest(request,response);
+        else if(action.equals("denyFriendRequest")){
+            modifiedUrl = this.executeDenyRequest(request,response);
         }
         else if(action.equals("viewGroup")){
             modifiedUrl = "/secureUser/viewGroup.jsp";
@@ -286,37 +283,29 @@ public class ControllerServlet extends HttpServlet {
         return urlToRedirectTo;
     }
     
-    private String executeIncomingDenyRequest(HttpServletRequest request, HttpServletResponse response) {
+    private String executeDenyRequest(HttpServletRequest request, HttpServletResponse response) {
         String urlToRedirectTo = "/secureUser/viewFriends.jsp";
         FriendsBean friendsBeanObj = new FriendsBean();
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         String currentUser = request.getRemoteUser();
-        String requestor = request.getParameter("requestor");
-        
-        if(requestor != null){
-            friendsBeanObj.setFirstFriend(requestor);
-            friendsBeanObj.setSecondFriend(currentUser);
-        }
+        String requestor = request.getParameter("username");
+
+        friendsBeanObj.setFirstFriend(requestor);
+        friendsBeanObj.setSecondFriend(currentUser);
         databaseDriverObj.denyRequest(friendsBeanObj);
+        
+        ArrayList<FriendsBean> friendsList = databaseDriverObj.getFriendsOf(currentUser);
+        request.setAttribute("friendsList", friendsList);
+
+        ArrayList<FriendRequestsBean> incomingFriendRequestsBeanObj = databaseDriverObj.getIncomingFriendRequests(currentUser);
+        request.setAttribute("incomingList", incomingFriendRequestsBeanObj);
+
+        ArrayList<FriendRequestsBean> outgoingFriendRequestsBeanObj = databaseDriverObj.getOutgoingFriendRequests(currentUser);
+        request.setAttribute("outgoingList", outgoingFriendRequestsBeanObj);
         return urlToRedirectTo;
     }
     
-        private String executeOutgoingDenyRequest(HttpServletRequest request, HttpServletResponse response) {
-        String urlToRedirectTo = "/secureUser/viewFriends.jsp";
-        FriendsBean friendsBeanObj = new FriendsBean();
-        
-        DatabaseDriver databaseDriverObj = new DatabaseDriver();
-        String currentUser = request.getRemoteUser();
-        String requestee = request.getParameter("requestee");
-        
-        if(requestee != null){
-            friendsBeanObj.setFirstFriend(currentUser);
-            friendsBeanObj.setSecondFriend(requestee);
-        }
-        databaseDriverObj.denyRequest(friendsBeanObj);
-        return urlToRedirectTo;
-    }
     
     private String executeAddFriend(HttpServletRequest request, HttpServletResponse response) {
         String urlToRedirectTo = "/secureUser/viewFriends.jsp";

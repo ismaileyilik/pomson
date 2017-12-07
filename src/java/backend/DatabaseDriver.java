@@ -482,7 +482,7 @@ public class DatabaseDriver {
         
         PreparedStatement ps = null;
         ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
-        String sql = "DELETE FROM FriendRequests WHERE (Requestor = ? OR Requestee = ? AND Requestor = ? OR Requestee = ?)";
+        String sql = "DELETE FROM FriendRequests WHERE (Requestor = ? OR Requestee = ?) AND (Requestor = ? OR Requestee = ?)";
 
         try{
             ps = connection.prepareStatement(sql);
