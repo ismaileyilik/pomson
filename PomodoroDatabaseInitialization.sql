@@ -9,8 +9,6 @@ DROP TABLE IF EXISTS Groups;
 DROP TABLE IF EXISTS Users;
 DROP PROCEDURE IF EXISTS CreateGroupFirstTime;
 DROP VIEW IF EXISTS GroupMemberGroups;
-DROP VIEW IF EXISTS IncomingFriendRequests;
-DROP VIEW IF EXISTS OutgoingFriendRequests;
 DROP TRIGGER IF EXISTS ProcessFriendRequests;
 DROP TRIGGER IF EXISTS AddUserRole;
 DROP FUNCTION IF EXISTS CheckIfInUserRoles;
@@ -34,6 +32,8 @@ GroupID int(10) PRIMARY KEY AUTO_INCREMENT,
 GroupName varchar(255),
 Description varchar(255),
 VerificationBeforeJoinBoolean tinyint(1));
+
+INSERT INTO Groups(GroupID, GroupName, Description, VerificationBeforeJoinBoolean) VALUES(-1, 'Personal Goals', 'This group is for your personal goals', 1);
 
 CREATE TABLE IF NOT EXISTS GroupMembers(
 GroupID int(10), 
@@ -64,7 +64,7 @@ PRIMARY KEY (Requestor, Requestee));
 
 CREATE TABLE IF NOT EXISTS Goals(
 GoalID int(10) PRIMARY KEY AUTO_INCREMENT UNIQUE,
-GroupID int(10),
+GroupID int(10) ,
 Username varchar(255),
 GoalName varchar(255),
 Description varchar(255),
@@ -86,12 +86,6 @@ FOREIGN KEY (GoalID) REFERENCES Goals(GoalID));
 CREATE VIEW GroupMemberGroups AS SELECT gm.GroupMember,gm.GroupRole,gm.JoinDate,g.GroupID,g.GroupName,g.Description,g.VerificationBeforeJoinBoolean
 FROM GroupMembers gm INNER JOIN Groups g ON gm.GroupID = g.GroupID;
 
-CREATE VIEW IncomingFriendRequests AS SELECT fr.Requestor
-FROM FriendRequests fr WHERE fr.Requestor <> CURRENT_USER() and fr.Requestee = CURRENT_USER();
-
-CREATE VIEW OutgoingFriendRequests AS SELECT fr.Requestee
-FROM FriendRequests fr WHERE fr.Requestee <> CURRENT_USER() and fr.Requestor = CURRENT_USER();
-
 
 DELIMITER //
 CREATE TRIGGER ProcessFriendRequests AFTER UPDATE ON FriendRequests
@@ -102,7 +96,7 @@ ELSEIF NEW.AcceptedStatusBoolean = 1 THEN
 	INSERT INTO Friends(FirstFriend, SecondFriend) VALUES(NEW.Requestor, NEW.Requestee);
 	DELETE FROM FriendRequests WHERE NEW.Requestor = Requestor and NEW.Requestee = Requestee;
 END IF;
-;;
+//
 DELIMITER ;
 
 DELIMITER //

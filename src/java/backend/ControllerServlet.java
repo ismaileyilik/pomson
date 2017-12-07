@@ -56,7 +56,6 @@ public class ControllerServlet extends HttpServlet {
         }
         else if( action.equals("createGroup")){
             modifiedUrl = "/secureUser/createGroup.jsp";
-            //TODO get infro from DB and pass it with request obj
         }
         else if( action.equals("findGroups")){
             modifiedUrl = "/secureUser/findGroups.jsp";
@@ -100,8 +99,30 @@ public class ControllerServlet extends HttpServlet {
         else if(action.equals("addFriend")){
             modifiedUrl = this.executeAddFriend(request,response);
         }
-        else if(action.equals("denyFriendRequest")){
-            modifiedUrl = this.executeDenyRequest(request,response);
+        else if(action.equals("denyIncomingFriendRequest")){
+            modifiedUrl = this.executeIncomingDenyRequest(request,response);
+        }
+        else if(action.equals("denyOutgoingFriendRequest")){
+            modifiedUrl = this.executeOutgoingDenyRequest(request,response);
+        }
+        else if(action.equals("viewGroup")){
+            modifiedUrl = "/secureUser/viewGroup.jsp";
+            String groupID = request.getParameter("groupID");
+            int groupIDInt = Integer.parseInt(groupID);
+            DatabaseDriver dbd = new DatabaseDriver();
+            GroupsBean group = dbd.getGroup(groupIDInt);
+            request.setAttribute("group", group);
+        }
+        else if(action.equals("leaveGroup")){
+            modifiedUrl = "/secureUser/viewGroups.jsp";
+            String groupID = request.getParameter("groupID");
+            int groupIDInt = Integer.parseInt(groupID);
+            DatabaseDriver dbd = new DatabaseDriver();
+            dbd.leaveGroup(groupIDInt,request.getRemoteUser());
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+            ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
+            request.setAttribute("groupList", groups);
         }
         
         getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response); 
@@ -265,18 +286,34 @@ public class ControllerServlet extends HttpServlet {
         return urlToRedirectTo;
     }
     
-    private String executeDenyRequest(HttpServletRequest request, HttpServletResponse response) {
-        String urlToRedirectTo = "/secureUser/viewGroups.jsp";
+    private String executeIncomingDenyRequest(HttpServletRequest request, HttpServletResponse response) {
+        String urlToRedirectTo = "/secureUser/viewFriends.jsp";
         FriendsBean friendsBeanObj = new FriendsBean();
         
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         String currentUser = request.getRemoteUser();
         String requestor = request.getParameter("requestor");
+        
+        if(requestor != null){
+            friendsBeanObj.setFirstFriend(requestor);
+            friendsBeanObj.setSecondFriend(currentUser);
+        }
+        databaseDriverObj.denyRequest(friendsBeanObj);
+        return urlToRedirectTo;
+    }
+    
+        private String executeOutgoingDenyRequest(HttpServletRequest request, HttpServletResponse response) {
+        String urlToRedirectTo = "/secureUser/viewFriends.jsp";
+        FriendsBean friendsBeanObj = new FriendsBean();
+        
+        DatabaseDriver databaseDriverObj = new DatabaseDriver();
+        String currentUser = request.getRemoteUser();
         String requestee = request.getParameter("requestee");
         
-
-        friendsBeanObj.setFirstFriend(currentUser);
-        friendsBeanObj.setSecondFriend(requestee);
+        if(requestee != null){
+            friendsBeanObj.setFirstFriend(currentUser);
+            friendsBeanObj.setSecondFriend(requestee);
+        }
         databaseDriverObj.denyRequest(friendsBeanObj);
         return urlToRedirectTo;
     }

@@ -36,7 +36,7 @@
                 <tr>
                     <td>${incoming.requestor}</td>
                     <td><a href="<c:url value='/controllerServlet?action=acceptFriendRequest&username=${incoming.requestor}'/>">Accept Request</a></td>
-                    <td><a href="<c:url value='/controllerServlet?action=denyFriendRequest&username=${incoming.requestor}'/>">Deny Request</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=denyIncomingFriendRequest&username=${incoming.requestor}'/>">Deny Request</a></td>
                 </tr>
             </c:forEach>
         </table>
@@ -45,7 +45,7 @@
             <c:forEach var="outgoing" items="${outgoingList}">
                 <tr>
                     <td>${outgoing.requestee}</td>
-                    <td><a href="<c:url value='/controllerServlet?action=denyFriendRequest&username=${outgoing.requestee}'/>">Cancel Request</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=denyOutgoingFriendRequest&username=${outgoing.requestee}'/>">Cancel Request</a></td>
                 </tr>
             </c:forEach>
         </table>

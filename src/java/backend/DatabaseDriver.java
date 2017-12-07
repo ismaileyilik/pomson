@@ -172,6 +172,36 @@ public class DatabaseDriver {
         closeConnection();  
         return returnList;
     }
+     public GroupsBean getGroup(int groupID){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ResultSet rs  = null;
+        String sql = "SELECT * FROM Groups WHERE GroupID = ?";
+        GroupsBean newGroup = null;
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, groupID);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                String name = rs.getString("GroupName");
+                int groupId = rs.getInt("GroupID");
+                String description = rs.getString("Description");
+                boolean verificationBeforeJoinBoolean = rs.getBoolean("VerificationBeforeJoinBoolean");
+                newGroup = new GroupsBean();
+                newGroup.setGroupName(name);
+                newGroup.setGroupID(groupId);
+                newGroup.setDescription(description);
+                newGroup.setVerifyBeforeJoining(verificationBeforeJoinBoolean);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection(); 
+        return newGroup;
+    }
     
     public ArrayList<GroupsBean> getMembershipOf(String username){
         openConnection();
@@ -460,6 +490,26 @@ public class DatabaseDriver {
             ps.setString(2, friendsBeanObj.getFirstFriend());
             ps.setString(3, friendsBeanObj.getSecondFriend());
             ps.setString(4, friendsBeanObj.getSecondFriend());
+            ps.executeUpdate();
+            
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+    }
+
+    public void leaveGroup(int groupIDInt,String username) {
+        openConnection();
+        
+        PreparedStatement ps = null;
+        String sql = "DELETE FROM GroupMembers WHERE (groupID = ? AND GroupMember = ?)";
+
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, groupIDInt);
+            ps.setString(2, username);
             ps.executeUpdate();
             
             ps.close();
