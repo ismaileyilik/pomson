@@ -24,7 +24,7 @@
             <textarea class = "mediumFont" rows="4" cols="60" name="goalDescription"> </textarea> <br>
             Apply Goal to Group[Optional]:
             <select name = "groupIDToApplyTo">
-                <option value=0>None</option>
+                <option value=-1 selected>Personal Goal</option>
                 <c:forEach var="group" items="${membershipGroupIDList}">
                     <option value="${group.groupID}"/>${group.groupName}</option>
                 </c:forEach>
