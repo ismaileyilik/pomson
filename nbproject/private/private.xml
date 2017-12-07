@@ -3,10 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/secureUser/userSettings.jsp</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/META-INF/context.xml</file>
             <file>file:/home/colton/NetBeansProjects/PomodoroTimer/src/java/backend/DatabaseDriver.java</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/src/java/beans/UsersBean.java</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/secureUser/dashboard.jsp</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/secureUser/viewGroup.jsp</file>
             <file>file:/home/colton/NetBeansProjects/PomodoroTimer/src/java/backend/ControllerServlet.java</file>
-            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/src/java/beans/GroupsBean.java</file>
-            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/src/java/beans/GroupMembersBean.java</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/login.jsp</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/secureUser/updateGoals.jsp</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/WEB-INF/web.xml</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/secureUser/pomodoroSession.jsp</file>
+            <file>file:/home/colton/NetBeansProjects/PomodoroTimer/web/secureUser/viewFriends.jsp</file>
         </group>
     </open-files>
 </project-private>

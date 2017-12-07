@@ -33,8 +33,6 @@ GroupName varchar(255),
 Description varchar(255),
 VerificationBeforeJoinBoolean tinyint(1));
 
-INSERT INTO Groups(GroupID, GroupName, Description, VerificationBeforeJoinBoolean) VALUES(-1, 'Personal Goals', 'This group is for your personal goals', 1);
-
 CREATE TABLE IF NOT EXISTS GroupMembers(
 GroupID int(10), 
 GroupMember varchar(255),
@@ -72,7 +70,6 @@ StartTime timestamp,
 EndTime timestamp,
 FOREIGN KEY (GroupId) REFERENCES Groups(GroupID),
 FOREIGN KEY (Username) REFERENCES Users(Username));
-
 
 CREATE TABLE IF NOT EXISTS Pomodoros(
 PomodoroID int(10) PRIMARY KEY AUTO_INCREMENT UNIQUE,

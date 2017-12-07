@@ -45,7 +45,10 @@ public class ControllerServlet extends HttpServlet {
             DatabaseDriver databaseDriverObj = new DatabaseDriver();
             String username = request.getRemoteUser();
             ArrayList<GoalsBean> goalsList = databaseDriverObj.getGoalsOf(username);
-            request.setAttribute("goalsList", goalsList); 
+            request.setAttribute("goalsList", goalsList);
+            
+            UsersBean usersBeanObj = databaseDriverObj.getUserPreferences(username);
+            request.setAttribute("userPrefs", usersBeanObj);
         }
         else if( action.equals("updateGoals")){
             modifiedUrl = "/secureUser/updateGoals.jsp";
@@ -120,6 +123,14 @@ public class ControllerServlet extends HttpServlet {
             String username = request.getRemoteUser();
             ArrayList<GroupsBean> groups = databaseDriverObj.getMembershipOf(username);
             request.setAttribute("groupList", groups);
+        }        
+        else if(action.equals("userSettings")){
+            modifiedUrl = "/secureUser/userSettings.jsp";
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            String username = request.getRemoteUser();
+
+            UsersBean usersBeanObj = databaseDriverObj.getUserPreferences(username);
+            request.setAttribute("userPrefs", usersBeanObj);
         }
         
         getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response); 
@@ -148,6 +159,9 @@ public class ControllerServlet extends HttpServlet {
         }
         else if(formAction.equals("updateGoalForm")){
             modifiedUrl = this.executeUpdateGoalForm(request, response);
+        }
+        else if(formAction.equals("updateUserSettingsForm")){
+            modifiedUrl = this.executeUpdateUserSettings(request, response);
         }
        
         getServletContext().getRequestDispatcher(modifiedUrl).forward(request, response);
@@ -327,6 +341,26 @@ public class ControllerServlet extends HttpServlet {
         request.setAttribute("outgoingList", outgoingFriendRequestsBeanObj);
     
         return urlToRedirectTo;
+    }
+
+    private String executeUpdateUserSettings(HttpServletRequest request, HttpServletResponse response) {
+            String urlToRedirectTo = "/secureUser/dashboard.jsp";
+            
+            String username = request.getRemoteUser();
+            DatabaseDriver databaseDriverObj = new DatabaseDriver();
+            int pomLength = Integer.parseInt(request.getParameter("pomLength")); 
+            int pomShortBreakLength = Integer.parseInt(request.getParameter("pomBreakLength")); 
+            int pomLongBreakLength = Integer.parseInt(request.getParameter("pomLongBreakLength")); 
+            
+            UsersBean usersBeanObj = new UsersBean();
+            usersBeanObj.setUsername(username);
+            usersBeanObj.setPomodoroLengthPreferenceMins(pomLength);
+            usersBeanObj.setPomodoroShortBreakPreferenceMins(pomShortBreakLength);
+            usersBeanObj.setPomodoroLongBreakPreferenceMins(pomLongBreakLength);
+            
+            databaseDriverObj.updateUserPreferences(usersBeanObj);
+            
+            return urlToRedirectTo;
     }
 
 }

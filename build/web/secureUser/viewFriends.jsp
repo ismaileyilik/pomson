@@ -10,10 +10,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel='stylesheet' type='text/css' href='/inputFormStyleSheet.css'/>
         <title>View Friends</title>
     </head>
     <body>
-        Friends of <%= request.getRemoteUser() %> will be listed here
+        <h1> Friends of <%= request.getRemoteUser() %> <h1>
         <table>
             <tr>
                 <th style="margin-right:10px;">Username</th>
@@ -30,7 +31,7 @@
                 </tr>
             </c:forEach>
         </table>
-        <h1> Incoming Friend Requests </h1> <br> <br>
+        <h3> Incoming Friend Requests </h3> <br> <br>
         <table>
             <c:forEach var="incoming" items="${incomingList}">
                 <tr>
@@ -40,7 +41,7 @@
                 </tr>
             </c:forEach>
         </table>
-        <h1> Outgoing Friend Requests </h1> <br> <br>
+        <h3> Outgoing Friend Requests </h3> <br> <br>
         <table>
             <c:forEach var="outgoing" items="${outgoingList}">
                 <tr>

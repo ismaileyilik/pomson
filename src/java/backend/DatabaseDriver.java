@@ -520,4 +520,58 @@ public class DatabaseDriver {
         closeConnection();
     }
     
+    public UsersBean getUserPreferences(String username){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        String sql = "SELECT * FROM Users u WHERE u.Username = ?";
+        UsersBean usersBeanObj = new UsersBean();
+        
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            
+            
+            while(rs.next()){
+                int pomodoroLengthPreferenceMins = rs.getInt("PomodoroLengthPreferenceMins");
+                int pomodoroShortBreakPreferenceMins = rs.getInt("PomodoroShortBreakPreferenceMins");
+                int pomodoroLongBreakPreferenceMins = rs.getInt("PomodoroLongBreakPreferenceMins");
+                usersBeanObj.setPomodoroLengthPreferenceMins(pomodoroLengthPreferenceMins);
+                usersBeanObj.setPomodoroShortBreakPreferenceMins(pomodoroShortBreakPreferenceMins);
+                usersBeanObj.setPomodoroLongBreakPreferenceMins(pomodoroLongBreakPreferenceMins);
+
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+        return usersBeanObj;
+    }
+    
+    public void updateUserPreferences(UsersBean usersBeanObj){
+            openConnection();
+
+            PreparedStatement ps = null;
+            String sql = "UPDATE Users u SET PomodoroLengthPreferenceMins = ?,  PomodoroShortBreakPreferenceMins = ?, "
+                    + "PomodoroLongBreakPreferenceMins = ? WHERE u.Username = ?";
+
+            try{
+                ps = connection.prepareStatement(sql);
+                ps.setInt(1, usersBeanObj.getPomodoroLengthPreferenceMins());
+                ps.setInt(2, usersBeanObj.getPomodoroShortBreakPreferenceMins());
+                ps.setInt(3, usersBeanObj.getPomodoroLongBreakPreferenceMins());
+                ps.setString(4, usersBeanObj.getUsername());
+                
+                rs = ps.executeQuery();
+            } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            closeConnection();
+            
+    }
+    
 }

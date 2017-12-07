@@ -23,6 +23,7 @@
         <input type="hidden" name="action" value="savePomodoroForm">
             Task: <br>
             <input type ="text" class = "mediumFont" name="task"> <br>
+            <input type=hidden id="pomLength" name="pomLength" value="${userPrefs.pomodoroLengthPreferenceMins}"/>
             Comments: <br>
             <textarea class = "mediumFont" rows="4" cols="60" name="comments"> </textarea> <br>
             Apply Task to Goal:
@@ -42,8 +43,8 @@
         
         <script>
             var isPaused = true;
-            var defaultPomodoroLength = calcMinutesInSeconds(25);
-            var totalSecondsLeft = 5;
+            var defaultPomodoroLength = calcMinutesInSeconds(document.getElementById('pomLength').value);
+            var totalSecondsLeft = defaultPomodoroLength;
             var minutesLeft = Math.floor(totalSecondsLeft/60);
             var secondsLeft = totalSecondsLeft % 60;
             // Update the count down every 1 second
