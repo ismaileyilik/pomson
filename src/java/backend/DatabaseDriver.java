@@ -364,4 +364,65 @@ public class DatabaseDriver {
         closeConnection();
     }
     
+    public ArrayList<FriendRequestsBean> getIncomingFriendRequests(String username){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
+        String sql = "SELECT * FROM FriendRequests fr WHERE fr.Requestor <> ? and fr.Requestee = ?;";
+        
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, username);
+            rs = ps.executeQuery();
+            
+            while(rs.next()){
+                String requestor = rs.getString("requestor");
+                String requestee = rs.getString("requestee");
+                FriendRequestsBean friendRequestsBeanObj = new FriendRequestsBean();
+                friendRequestsBeanObj.setRequestee(requestee);
+                friendRequestsBeanObj.setRequestor(requestor);
+                returnList.add(friendRequestsBeanObj);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+        return returnList;
+    }
+    
+    public ArrayList<FriendRequestsBean> getOutgoingFriendRequests(String username){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
+        String sql = "SELECT * FROM FriendRequests fr WHERE fr.Requestor = ? and fr.Requestee <> ?;";
+        
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ps.setString(2, username);
+            rs = ps.executeQuery();
+            
+            while(rs.next()){
+                String requestor = rs.getString("requestor");
+                String requestee = rs.getString("requestee");
+                FriendRequestsBean friendRequestsBeanObj = new FriendRequestsBean();
+                friendRequestsBeanObj.setRequestee(requestee);
+                friendRequestsBeanObj.setRequestor(requestor);
+                returnList.add(friendRequestsBeanObj);
+            }
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+        return returnList;
+    }
+    
+    
 }

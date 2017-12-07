@@ -30,5 +30,24 @@
                 </tr>
             </c:forEach>
         </table>
+        <h1> Incoming Friend Requests </h1> <br> <br>
+        <table>
+            <c:forEach var="incoming" items="${incomingList}">
+                <tr>
+                    <td>${incoming.requestor}</td>
+                    <td><a href="<c:url value='/controllerServlet?action=acceptFriendRequest&username=${incoming.requestor}'/>">Accept Request</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=denyFriendRequest&username=${incoming.requestor}'/>">Deny Request</a></td>
+                </tr>
+            </c:forEach>
+        </table>
+        <h1> Outgoing Friend Requests </h1> <br> <br>
+        <table>
+            <c:forEach var="outgoing" items="${outgoingList}">
+                <tr>
+                    <td>${outgoing.requestee}</td>
+                    <td><a href="<c:url value='/controllerServlet?action=removeFriend&username=${outgoing.requestee}'/>">Cancel Request</a></td>
+                </tr>
+            </c:forEach>
+        </table>
     </body>
 </html>

@@ -32,6 +32,7 @@
                 <td>${goal.goalDescription}</td>
                 <td>${goal.startTime}</td>
                 <td><a href="<c:url value='/controllerServlet?action=pomodoroSession&goalID=${goal.goalID}'/>">Start Pomodoro!</a></td>
+                <td><a href="<c:url value='/controllerServlet?action=viewSingleGoal&goalID=${goal.goalID}'/>">View Details</a></td>
             </tr>
             </c:forEach>
         </table>

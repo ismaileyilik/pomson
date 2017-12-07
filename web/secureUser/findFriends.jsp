@@ -44,8 +44,5 @@
                     </tr>
                 </c:forEach>
             </table>
-                    
-        <h1> Incoming Friend Requests </h1> <br> <br>
-        <h1> Outgoing Friend Requests </h1> <br> <br>
     </body>
 </html>

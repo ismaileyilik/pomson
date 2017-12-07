@@ -1,10 +1,4 @@
 CREATE DATABASE IF NOT EXISTS PomodoroDatabase;
-DROP PROCEDURE IF EXISTS CreateGroupFirstTime;
-DROP VIEW IF EXISTS GroupMemberGroups;
-DROP TRIGGER IF EXISTS ProcessFriendRequests;
-DROP TRIGGER IF EXISTS AddUserRole;
-DROP FUNCTION IF EXISTS CountNumPomodorosForGoal;
-DROP FUNCTION IF EXISTS CheckIfInUserRoles;
 DROP TABLE IF EXISTS UserRoles;
 DROP TABLE IF EXISTS GroupMembers;
 DROP TABLE IF EXISTS Friends;
@@ -13,6 +7,13 @@ DROP TABLE IF EXISTS Pomodoros;
 DROP TABLE IF EXISTS Goals;
 DROP TABLE IF EXISTS Groups;
 DROP TABLE IF EXISTS Users;
+DROP PROCEDURE IF EXISTS CreateGroupFirstTime;
+DROP VIEW IF EXISTS GroupMemberGroups;
+DROP VIEW IF EXISTS IncomingFriendRequests;
+DROP VIEW IF EXISTS OutgoingFriendRequests;
+DROP TRIGGER IF EXISTS ProcessFriendRequests;
+DROP TRIGGER IF EXISTS AddUserRole;
+DROP FUNCTION IF EXISTS CheckIfInUserRoles;
 
 SET SQL_MODE='ALLOW_INVALID_DATES';
 
@@ -85,8 +86,14 @@ FOREIGN KEY (GoalID) REFERENCES Goals(GoalID));
 CREATE VIEW GroupMemberGroups AS SELECT gm.GroupMember,gm.GroupRole,gm.JoinDate,g.GroupID,g.GroupName,g.Description,g.VerificationBeforeJoinBoolean
 FROM GroupMembers gm INNER JOIN Groups g ON gm.GroupID = g.GroupID;
 
+CREATE VIEW IncomingFriendRequests AS SELECT fr.Requestor
+FROM FriendRequests fr WHERE fr.Requestor <> CURRENT_USER() and fr.Requestee = CURRENT_USER();
 
-DELIMITER ;;
+CREATE VIEW OutgoingFriendRequests AS SELECT fr.Requestee
+FROM FriendRequests fr WHERE fr.Requestee <> CURRENT_USER() and fr.Requestor = CURRENT_USER();
+
+
+DELIMITER //
 CREATE TRIGGER ProcessFriendRequests AFTER UPDATE ON FriendRequests
 FOR EACH ROW 
 IF NEW.AcceptedStatusBoolean = 0 THEN
@@ -98,28 +105,25 @@ END IF;
 ;;
 DELIMITER ;
 
-DELIMITER ;;
+DELIMITER //
 CREATE FUNCTION CheckIfInUserRoles(username varchar(255)) RETURNS INT
-BEGIN
+	BEGIN
 	DECLARE existsBool INT;
     SET existsBool = (SELECT COUNT(*) FROM UserRoles ur WHERE ur.Username = username);
     RETURN existsBool;
-END;;
+    END//
 DELIMITER ;
 
-DELIMITER ;;
+DELIMITER //
 CREATE TRIGGER AddUserRole AFTER INSERT ON Users
 FOR EACH ROW BEGIN
-	DECLARE username varchar(255);
-	SET username = (SELECT u1.Username from Users u1);
-    IF (CheckIfInUserRoles(username) = 0) THEN
-		INSERT INTO UserRoles(Username, Role) VALUES(username, 'UserRole');
+    IF (CheckIfInUserRoles(NEW.Username) = 0) THEN
+		INSERT INTO UserRoles(Username, Role) VALUES(NEW.Username, 'UserRole');
     END IF;
-    END;
-;;
+    END//
 DELIMITER ;
 
-DELIMITER ;;
+DELIMITER //
 CREATE PROCEDURE CreateGroupFirstTime
 (IN GroupName varchar(255),
 IN Description varchar(255),
@@ -130,17 +134,11 @@ BEGIN
 	INSERT INTO Groups(GroupName, Description, VerificationBeforeJoinBoolean) VALUES(GroupName, Description, VerificationBeforeJoinBoolean);
     SET keyPrimary = LAST_INSERT_ID();
     INSERT INTO GroupMembers(GroupID, GroupMember, GroupRole) VALUES(keyPrimary, Username, 'Admin');
-END ;;
-DELIMITER ;
+END //
 
-DELIMITER ;;
-CREATE FUNCTION CountNumPomodorosForGoal(goalID Int) RETURNS INT
-BEGIN
-	DECLARE totalPoms INT;
-    SET totalPoms = (SELECT COUNT(PomodoroID) FROM Pomodoros p, Goals g WHERE p.goalID = g.goalID);
-    RETURN totalPoms;
-END;;
-DELIMITER ;
+
+
+
 
     
 

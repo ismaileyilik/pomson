@@ -11,11 +11,9 @@ import beans.GoalsBean;
 import beans.GroupMembersBean;
 import beans.GroupsBean;
 import beans.PomodorosBean;
-import beans.UserRoleBean;
 import beans.UsersBean;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -81,8 +79,15 @@ public class ControllerServlet extends HttpServlet {
             modifiedUrl = "/secureUser/viewFriends.jsp";
             DatabaseDriver databaseDriverObj = new DatabaseDriver();
             String username = request.getRemoteUser();
+            
             ArrayList<FriendsBean> friendsList = databaseDriverObj.getFriendsOf(username);
             request.setAttribute("friendsList", friendsList);
+            
+            ArrayList<FriendRequestsBean> incomingFriendRequestsBeanObj = databaseDriverObj.getIncomingFriendRequests(username);
+            request.setAttribute("incomingList", incomingFriendRequestsBeanObj);
+            
+            ArrayList<FriendRequestsBean> outgoingFriendRequestsBeanObj = databaseDriverObj.getOutgoingFriendRequests(username);
+            request.setAttribute("outgoingList", outgoingFriendRequestsBeanObj);
         }
         else if(action.equals("joinGroup")){
             modifiedUrl = this.executeJoinGroup(request,response);
@@ -269,13 +274,19 @@ public class ControllerServlet extends HttpServlet {
                 
         DatabaseDriver databaseDriverObj = new DatabaseDriver();
         String requestor = request.getRemoteUser();
-        String requestee = request.getParameter("secondFriend");
+        String requestee = request.getParameter("username");
         FriendRequestsBean friendRequestsBeanObj = new FriendRequestsBean();
         friendRequestsBeanObj.setRequestor(requestor);
         friendRequestsBeanObj.setRequestee(requestee);
         databaseDriverObj.insertFriendRequestsBean(friendRequestsBeanObj);
         ArrayList<FriendsBean> friendsList = databaseDriverObj.getFriendsOf(requestor);
         request.setAttribute("friendsList", friendsList);
+        
+        ArrayList<FriendRequestsBean> incomingFriendRequestsBeanObj = databaseDriverObj.getIncomingFriendRequests(requestor);
+        request.setAttribute("incomingList", incomingFriendRequestsBeanObj);
+
+        ArrayList<FriendRequestsBean> outgoingFriendRequestsBeanObj = databaseDriverObj.getOutgoingFriendRequests(requestor);
+        request.setAttribute("outgoingList", outgoingFriendRequestsBeanObj);
     
         return urlToRedirectTo;
     }
