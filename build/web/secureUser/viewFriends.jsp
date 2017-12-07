@@ -45,7 +45,7 @@
             <c:forEach var="outgoing" items="${outgoingList}">
                 <tr>
                     <td>${outgoing.requestee}</td>
-                    <td><a href="<c:url value='/controllerServlet?action=removeFriend&username=${outgoing.requestee}'/>">Cancel Request</a></td>
+                    <td><a href="<c:url value='/controllerServlet?action=denyFriendRequest&username=${outgoing.requestee}'/>">Cancel Request</a></td>
                 </tr>
             </c:forEach>
         </table>

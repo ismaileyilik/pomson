@@ -369,7 +369,7 @@ public class DatabaseDriver {
         
         PreparedStatement ps = null;
         ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
-        String sql = "SELECT * FROM FriendRequests fr WHERE fr.Requestor <> ? and fr.Requestee = ?;";
+        String sql = "SELECT * FROM FriendRequests fr WHERE fr.Requestor <> ? and fr.Requestee = ?";
         
         try{
             ps = connection.prepareStatement(sql);
@@ -399,7 +399,7 @@ public class DatabaseDriver {
         
         PreparedStatement ps = null;
         ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
-        String sql = "SELECT * FROM FriendRequests fr WHERE fr.Requestor = ? and fr.Requestee <> ?;";
+        String sql = "SELECT * FROM FriendRequests fr WHERE fr.Requestor = ? and fr.Requestee <> ?";
         
         try{
             ps = connection.prepareStatement(sql);
@@ -424,5 +424,50 @@ public class DatabaseDriver {
         return returnList;
     }
     
+    public void cancelFriendship(FriendsBean friendsBeanObj){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
+        String sql = "DELETE FROM Friends fr WHERE (fr.Firstfriend = ? OR fr.SecondFriend = ?) AND (fr.FirstFriend = ? OR fr.SecondFriend = ?)";
+        
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, friendsBeanObj.getFirstFriend());
+            ps.setString(2, friendsBeanObj.getFirstFriend());
+            ps.setString(3, friendsBeanObj.getSecondFriend());
+            ps.setString(4, friendsBeanObj.getSecondFriend());
+            ps.executeUpdate();
+            
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+    }
+    
+    public void denyRequest(FriendsBean friendsBeanObj){
+        openConnection();
+        
+        PreparedStatement ps = null;
+        ArrayList<FriendRequestsBean> returnList = new ArrayList<>();
+        String sql = "DELETE FROM FriendRequests WHERE (Requestor = ? OR Requestee = ? AND Requestor = ? OR Requestee = ?)";
+
+        try{
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, friendsBeanObj.getFirstFriend());
+            ps.setString(2, friendsBeanObj.getFirstFriend());
+            ps.setString(3, friendsBeanObj.getSecondFriend());
+            ps.setString(4, friendsBeanObj.getSecondFriend());
+            ps.executeUpdate();
+            
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        closeConnection();
+    }
     
 }
