@@ -16,7 +16,9 @@
     </head>
     <body>
 <!-- Display the timer in an element -->
-        <h1> <div class = "centeredText"><p id="timer"></p></div> </h1>
+        <h1> 
+        <div class = "centeredText"><p id="timer"></p></div> </h1>
+        <div class = "centeredText"><p>Edit Settings <a href="/controllerServlet?action=userSettings" >here</a></p></div>
         <br>
         <div class = "centeredText"> 
         <form name="savePomodoroForm" method="POST" action="../controllerServlet">
@@ -36,10 +38,11 @@
             <button class="start">Start</button>
             <button class="pause">Pause</button>
             <button class="reset">Reset</button>
-            <button type="button" onclick="goBack()">Cancel</button>
             <button type="submit" class ="saveButton" value="Submit">Save Pomodoro</button>
+            <button type="button" onclick="goBack()">Dashboard</button>
         </form>
         </div>
+            
         
         <script>
             var isPaused = true;
@@ -86,7 +89,7 @@
             });
 
             function goBack() {
-                window.history.back();
+                location.href = "/secureUser/dashboard.jsp";
             }
 
             function calcMinutesInSeconds(minutesDesired){

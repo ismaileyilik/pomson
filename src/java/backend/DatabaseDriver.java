@@ -565,7 +565,7 @@ public class DatabaseDriver {
                 ps.setInt(3, usersBeanObj.getPomodoroLongBreakPreferenceMins());
                 ps.setString(4, usersBeanObj.getUsername());
                 
-                rs = ps.executeQuery();
+                ps.executeUpdate();
             } catch (SQLException ex) {
             Logger.getLogger(DatabaseDriver.class.getName()).log(Level.SEVERE, null, ex);
         }

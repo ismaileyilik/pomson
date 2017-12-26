@@ -344,7 +344,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private String executeUpdateUserSettings(HttpServletRequest request, HttpServletResponse response) {
-            String urlToRedirectTo = "/secureUser/dashboard.jsp";
+            String urlToRedirectTo = "/secureUser/pomodoroSession.jsp";
             
             String username = request.getRemoteUser();
             DatabaseDriver databaseDriverObj = new DatabaseDriver();
@@ -359,6 +359,7 @@ public class ControllerServlet extends HttpServlet {
             usersBeanObj.setPomodoroLongBreakPreferenceMins(pomLongBreakLength);
             
             databaseDriverObj.updateUserPreferences(usersBeanObj);
+            request.setAttribute("userPrefs", usersBeanObj);
             
             return urlToRedirectTo;
     }

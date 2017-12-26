@@ -20,9 +20,6 @@
         <p>View Friends <a href="/controllerServlet?action=viewFriends" >here</a></p>
         <p>Add Friends <a href="/controllerServlet?action=findFriends" >here</a></p>
         <p>Find Groups <a href="/controllerServlet?action=findGroups" >here</a></p>
-        <%-- <p>Edit Settings <a href="/controllerServlet?action=userSettings" >here</a></p>--%>
-
-
     </body>
 </html>
 
